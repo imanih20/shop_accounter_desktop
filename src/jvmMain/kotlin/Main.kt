@@ -1,0 +1,43 @@
+// Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+import androidx.compose.material.MaterialTheme
+import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.*
+import common.consts.typography
+import common.utils.DbUtils
+import common.utils.WindowSize
+import peresentation.base.baseCompose
+val LocalWindowSize = compositionLocalOf { WindowSize.COMPACT }
+
+@Composable
+@Preview
+fun app(windowSize: WindowSize) {
+    MaterialTheme(typography = typography) {
+        CompositionLocalProvider(
+            LocalLayoutDirection provides LayoutDirection.Rtl,
+            LocalWindowSize provides windowSize
+        ){
+            baseCompose()
+        }
+    }
+}
+
+fun main() = application {
+    DbUtils.connect()
+//    val windowState = rememberWindowState(size = DpSize(1100.dp, 800.dp))
+    val windowState = rememberWindowState(placement = WindowPlacement.Maximized)
+    Window(
+        onCloseRequest = ::exitApplication,
+        state = windowState,
+    ) {
+        app(WindowSize.basedOnWidth(windowState.size.width))
+    }
+}

@@ -28,7 +28,7 @@ import peresentation.common.components.listItemText
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun resultItemView(modifier: Modifier = Modifier,product: Product){
+fun resultItemView(modifier: Modifier = Modifier,product: Product,onEditClicked: (Product)->Unit,onDeleteClicked:(Int)->Unit){
     var activate by remember { mutableStateOf(false) }
     Card(
         modifier
@@ -37,25 +37,21 @@ fun resultItemView(modifier: Modifier = Modifier,product: Product){
         elevation = 3.dp,
         shape = RoundedCornerShape(3.dp)
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(5.dp)) {
             listItemText(product.title,Modifier.weight(1f).align(Alignment.CenterVertically))
             listItemText(TextUtils.onlyNumberString(product.quantity.toString()),Modifier.weight(1f).align(Alignment.CenterVertically))
             listItemText(TextUtils.addSeparator(product.purchasePrice.toString()),Modifier.weight(1f).align(Alignment.CenterVertically))
             listItemText(TextUtils.addSeparator(product.salePrice.toString()),Modifier.weight(1f).align(Alignment.CenterVertically))
             listItemText(product.owner,Modifier.weight(1f).align(Alignment.CenterVertically))
-            listItemText(product.pDate,Modifier.weight(1f).align(Alignment.CenterVertically))
-
             Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
                 if (activate) {
-                    Icon(
-                        FontAwesomeIcons.Solid.Tag,
-                        "تخفیف",
-                        tint = Color.Blue,
-                        modifier = Modifier.size(18.dp).clickable { })
+                    Icon(Icons.Filled.Edit, "ویرایش", tint = Color.Green, modifier = Modifier.size(20.dp).clickable {
+                        onEditClicked(product)
+                    })
                     Spacer(Modifier.size(10.dp))
-                    Icon(Icons.Filled.Edit, "ویرایش", tint = Color.Green, modifier = Modifier.size(20.dp).clickable { })
-                    Spacer(Modifier.size(10.dp))
-                    Icon(Icons.Filled.Delete, "حذف", tint = Color.Red, modifier = Modifier.size(20.dp).clickable { })
+                    Icon(Icons.Filled.Delete, "حذف", tint = Color.Red, modifier = Modifier.size(20.dp).clickable {
+                        onDeleteClicked(product.id)
+                    })
                 }
             }
         }

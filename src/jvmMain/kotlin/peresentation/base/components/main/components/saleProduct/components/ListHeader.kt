@@ -3,7 +3,10 @@ package peresentation.base.components.main.components.saleProduct.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,31 +15,37 @@ import peresentation.common.components.listItemText
 
 @Composable
 fun saleListHeader(){
-    Row(
-        Modifier
-            .background(MaterialTheme.colors.secondary,shape = RoundedCornerShape(5.dp))
-            .border(1.dp, MaterialTheme.colors.onSecondary, RoundedCornerShape(5.dp))
+    Card(
+        elevation = 5.dp,
+        shape = RoundedCornerShape(10.dp)
     ) {
-        listItemText(
-            "اسم کالا",
+        Row(
             Modifier
-                .weight(2f)
-        )
-        listItemText(
-            "تعداد",
-            Modifier
-                .weight(1f)
-        )
-        listItemText(
-            "قیمت کل",
-            Modifier
-                .weight(1f)
-        )
-        listItemText(
-            "تاریخ",
-            Modifier
-                .weight(1f)
-        )
+                .background(MaterialTheme.colors.secondary, shape = RoundedCornerShape(10.dp))
+                .padding(5.dp)
+        ) {
+            listItemText(
+                "اسم کالا",
+                Modifier
+                    .weight(2f)
+            )
+            listItemText(
+                "تعداد",
+                Modifier
+                    .weight(1f)
+            )
+            listItemText(
+                "قیمت کل",
+                Modifier
+                    .weight(1f)
+            )
+            listItemText(
+                "تاریخ",
+                Modifier
+                    .weight(1f)
+            )
+            Spacer(Modifier.weight(1f))
+        }
     }
 }
 

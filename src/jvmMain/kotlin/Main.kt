@@ -11,9 +11,15 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
+import common.appModule
 import common.consts.typography
 import common.utils.DbUtils
 import common.utils.WindowSize
+import data.financier.financierModule
+import data.product.productModule
+import data.statistic.statisticModule
+import data.trade.tradeModule
+import org.koin.core.context.startKoin
 import peresentation.base.baseCompose
 val LocalWindowSize = compositionLocalOf { WindowSize.COMPACT }
 
@@ -31,7 +37,11 @@ fun app(windowSize: WindowSize) {
 }
 
 fun main() = application {
-    DbUtils.connect()
+    startKoin {
+        printLogger()
+        modules(productModule, financierModule, tradeModule, appModule, statisticModule)
+    }
+    DbUtils.configureDb()
 //    val windowState = rememberWindowState(size = DpSize(1100.dp, 800.dp))
     val windowState = rememberWindowState(placement = WindowPlacement.Maximized)
     Window(

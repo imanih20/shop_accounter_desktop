@@ -22,10 +22,16 @@ import androidx.compose.ui.unit.sp
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.User
+import domain.financier.model.Financier
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun financierListItem(modifier: Modifier = Modifier,name: String,description: String){
+fun financierListItem(
+    modifier: Modifier = Modifier,
+    financier: Financier,
+    onEditClicked: (Financier)->Unit,
+    onDeleteClicked: (Int)->Unit
+) {
     var activate by remember{ mutableStateOf(false) }
     Card(
         modifier
@@ -51,14 +57,18 @@ fun financierListItem(modifier: Modifier = Modifier,name: String,description: St
                     )
                 }
             },
-            text = { Text(name, fontSize = 19.sp) },
-            secondaryText = {Text(description)},
+            text = { Text(financier.name, fontSize = 19.sp) },
+            secondaryText = {Text(financier.description +" درصد سود ${financier.share} درصد")},
             trailing = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     if (activate) {
-                        Icon(Icons.Filled.Edit, "ویرایش", tint = Color.Green, modifier = Modifier.clickable { })
+                        Icon(Icons.Filled.Edit, "ویرایش", tint = Color.Green, modifier = Modifier.clickable {
+                            onEditClicked(financier)
+                        })
                         Spacer(Modifier.size(10.dp))
-                        Icon(Icons.Filled.Delete, "حذف", tint = Color.Red, modifier = Modifier.clickable { })
+                        Icon(Icons.Filled.Delete, "حذف", tint = Color.Red, modifier = Modifier.clickable {
+                            onDeleteClicked(financier.id)
+                        })
                     }
                 }
             }

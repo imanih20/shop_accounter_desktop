@@ -1,61 +1,65 @@
 package peresentation.base.components.main.components.financiers
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import domain.financier.model.Financier
-import peresentation.base.components.main.components.financiers.components.financierListItem
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
+import org.jetbrains.exposed.exceptions.ExposedSQLException
+import org.koin.java.KoinJavaComponent.inject
+import peresentation.base.components.main.components.addProduct.reAssign
+import peresentation.base.components.main.components.financiers.components.addFinancier
+import peresentation.base.components.main.components.financiers.components.showFinanciers
 import peresentation.common.components.adaptiveLayout
-import peresentation.common.components.inputTextFiled
 
 @Composable
 fun financierManagerView() {
-    val controller = FinancierViewController()
+    val controller : FinancierViewController by inject(FinancierViewController::class.java)
+    val scope = rememberCoroutineScope()
+    val financierList = remember { mutableStateListOf<Financier>() }
+    suspend fun refreshList(){
+        controller.getFinanciers().collect{
+            financierList.reAssign(it)
+        }
+    }
+    scope.launch {
+        refreshList()
+    }
     adaptiveLayout(
-        {addFinancier(it)},
-        {showFinanciers(it,controller.getFinanciers())}
+        {
+            addFinancier(it){financier->
+                flow {
+                    var isSucceed = true
+                    controller.saveFinancier(financier).collect {b->
+                        isSucceed = b
+                    }
+                    refreshList()
+                    emit(isSucceed)
+                }
+
+            }
+        },
+        {showFinanciers(
+            it,
+            financierList,
+            {financier->
+                scope.launch {
+                    controller.updateFinancier(financier)
+                    refreshList()
+                }
+            },
+            {id->
+                scope.launch {
+                    controller.deleteFinancier(id)
+                    refreshList()
+                }
+            }
+        )}
     )
 }
 
-@Composable
-fun addFinancier(modifier: Modifier = Modifier){
-    var name : String by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    Column(modifier) {
-        inputTextFiled(
-            name,
-            {name = it},
-            label = "نام",
-            modifier = Modifier.fillMaxWidth()
-        )
-        inputTextFiled(
-            description,
-            {description = it},
-            label = "توضیحات (اختیاری)",
-            modifier = Modifier.fillMaxWidth(),
-            lines = 4
-        )
-        Button({},Modifier.align(Alignment.End)){
-            Text("ثبت")
-        }
-    }
-}
 
-@Composable
-fun showFinanciers(modifier: Modifier = Modifier,list: List<Financier>){
-    LazyColumn(modifier.padding(10.dp)) {
-        items(list){
-            financierListItem(name = it.name, description = it.description)
-            Spacer(Modifier.size(5.dp))
-        }
-    }
-}
 

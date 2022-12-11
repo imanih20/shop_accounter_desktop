@@ -15,7 +15,8 @@ fun inputTextFiled(
     modifier: Modifier = Modifier,
     label: String,
     readOnly: Boolean = false,
-    lines: Int = 1
+    lines: Int = 1,
+    isError : Boolean = false
 ){
     OutlinedTextField(
         value,
@@ -28,5 +29,6 @@ fun inputTextFiled(
         singleLine = lines == 1,
         modifier = modifier,
         readOnly = readOnly,
+        isError = isError
     )
 }

@@ -7,25 +7,37 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollbarAdapter
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import domain.trade.model.ProductTrade
 import peresentation.base.components.main.components.saleProduct.SaleProductController
+import peresentation.common.components.deleteDialog
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun showView(controller: SaleProductController, modifier: Modifier = Modifier) {
+fun showView(saleList: List<ProductTrade>, modifier: Modifier = Modifier,onDeleteRequest: (Int)->Unit) {
+    var visible by remember { mutableStateOf(false) }
+    var id by remember { mutableStateOf(0) }
     Box(modifier) {
         val state = rememberLazyListState()
+        if (visible) deleteDialog({visible = false}) {
+            onDeleteRequest(id)
+            visible = false
+        }
         LazyColumn(
             state = state
         ) {
             stickyHeader {
                 saleListHeader()
             }
-            items(controller.getSales()){
-                listItem(it.pid,it.quantity.toString(),it.totalPrice.toString(),it.date)
+            items(saleList){
+
+                listItem(it){i->
+                    id = i
+                    visible = true
+                }
                 Spacer(Modifier.size(2.dp))
             }
         }

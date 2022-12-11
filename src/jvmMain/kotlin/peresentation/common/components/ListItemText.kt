@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 
 @Composable
@@ -17,6 +18,7 @@ fun listItemText(title: String, modifier: Modifier){
         modifier
             .padding(10.dp),
         color = MaterialTheme.colors.onSecondary,
+        fontSize = 18.sp,
         textAlign = TextAlign.Center,
         overflow = TextOverflow.Clip
     )

@@ -27,6 +27,7 @@ fun mainView(selectedItem: MenuItems,modifier: Modifier = Modifier){
             MenuItems.FINANCIER-> financierManagerView()
             MenuItems.STATISTICS-> statisticsView()
             MenuItems.SEARCH-> searchView()
+            else -> {}
         }
     }
 }

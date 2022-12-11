@@ -1,4 +1,4 @@
-import org.jetbrains.compose.compose
+import org.gradle.internal.component.model.Exclude
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
@@ -24,6 +24,7 @@ kotlin {
         withJava()
     }
     val exposedVersion: String by project
+    val koinVersion: String by project
     sourceSets {
         val jvmMain by getting {
             dependencies {
@@ -34,6 +35,8 @@ kotlin {
                 implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
                 implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
                 implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+                implementation("io.insert-koin:koin-core:$koinVersion")
+                implementation("org.slf4j:slf4j-nop:2.0.5")
             }
         }
         val jvmTest by getting

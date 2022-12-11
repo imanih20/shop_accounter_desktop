@@ -36,6 +36,16 @@ object TextUtils {
         }
         return isZero
     }
+
+    fun isNumber(text: String) : Boolean {
+        val chars = text.toCharArray()
+        var isNumber = true
+        chars.forEach {
+            if (!it.isDigit())
+                isNumber = false
+        }
+        return isNumber
+    }
     fun addSeparator(number: String) : String{
         val chars = number.toCharArray()
         val builder = StringBuilder()

@@ -1,11 +1,22 @@
 package common.utils
 
+import data.financier.model.FinancierEntity
+import data.product.model.ProductEntity
+import data.statistic.model.StatisticEntity
+import data.trade.model.TradeEntity
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.transactions.TransactionManager
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.StdOutSqlLogger
+import org.jetbrains.exposed.sql.addLogger
+import org.jetbrains.exposed.sql.transactions.transaction
 
 object DbUtils {
-    fun connect(){
-        Database.connect("jdbc:sqlite:/data/data.db", "org.sqlite.JDBC")
+    fun configureDb(){
+        Database.connect("jdbc:sqlite:data/data.db", "org.sqlite.JDBC")
         // https://github.com/JetBrains/Exposed/wiki/FAQ
+        transaction {
+            addLogger(StdOutSqlLogger)
+            SchemaUtils.create(FinancierEntity,ProductEntity,TradeEntity,StatisticEntity)
+        }
     }
 }

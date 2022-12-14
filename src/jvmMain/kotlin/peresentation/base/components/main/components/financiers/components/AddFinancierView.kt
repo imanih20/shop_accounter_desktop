@@ -6,9 +6,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import common.utils.TextUtils
 import domain.financier.model.Financier
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import peresentation.common.components.inputTextFiled
 import peresentation.common.components.toast
@@ -25,6 +25,11 @@ fun addFinancier(modifier: Modifier = Modifier, saveFinancier: (Financier)->Flow
     var toastError by remember { mutableStateOf(false) }
     val hostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    fun clearInputs(){
+        name = ""
+        description = ""
+        share = ""
+    }
     Column(modifier, verticalArrangement = Arrangement.SpaceBetween) {
         Column {
             Row(Modifier.fillMaxWidth()) {
@@ -38,7 +43,7 @@ fun addFinancier(modifier: Modifier = Modifier, saveFinancier: (Financier)->Flow
                 Spacer(Modifier.size(5.dp))
                 inputTextFiled(
                     share,
-                    {share = it},
+                    {share = TextUtils.showNumberString(it)},
                     label = "درصد سود",
                     modifier = Modifier.weight(1f),
                     isError = isShareError
@@ -61,7 +66,8 @@ fun addFinancier(modifier: Modifier = Modifier, saveFinancier: (Financier)->Flow
                         saveFinancier(financier).collect {
                             if (it) {
                                 toastError = false
-                                notice = "ذخیره شد"
+                                notice = "ثبت شد"
+                                clearInputs()
                             } else {
                                 toastError = true
                                 notice = "این نام در حال حاظر موجود است."

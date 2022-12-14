@@ -24,7 +24,7 @@ fun editFinancierDialog(
     var isEdited by remember { mutableStateOf(false) }
     var share by remember { mutableStateOf(financier.share.toString()) }
     var description by remember { mutableStateOf(financier.description) }
-    Box {
+    Box(Modifier.wrapContentSize()) {
         AlertDialog(
             {onCloseRequest()},
             text = {

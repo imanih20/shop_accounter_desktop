@@ -47,6 +47,7 @@ fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
         state = windowState,
+        title = "حسابدار"
     ) {
         app(WindowSize.basedOnWidth(windowState.size.width))
     }

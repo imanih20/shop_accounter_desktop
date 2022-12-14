@@ -1,31 +1,29 @@
 package peresentation.base.components.main.components.addProduct.components
 
-import LocalWindowSize
-import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.onClick
 import androidx.compose.material.Button
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import common.utils.DateUtils
 import common.utils.PriceUtils
 import common.utils.TextUtils
-import common.utils.WindowSize
 import domain.financier.model.Financier
 import domain.product.model.Product
 import ir.huri.jcal.JalaliCalendar
 import kotlinx.coroutines.launch
-import peresentation.base.components.main.components.addProduct.AddProductController
 import peresentation.common.components.dropDownTextFiled
 import peresentation.common.components.inputDatePicker
 import peresentation.common.components.inputTextFiled
+import peresentation.common.components.toast
 
 
 @Composable
 fun addView( modifier: Modifier = Modifier,financiers: List<Financier>,onSaveButtonClicked: (Product,Int,String)->Unit) {
+    val scope = rememberCoroutineScope()
+    val toastState = remember { SnackbarHostState() }
     //ui text
     var title by remember { mutableStateOf("") }
     var numberOfPack by remember { mutableStateOf("") }
@@ -53,8 +51,11 @@ fun addView( modifier: Modifier = Modifier,financiers: List<Financier>,onSaveBut
     var isTotalPriceError by remember { mutableStateOf(false) }
     var isSalePriceError by remember { mutableStateOf(false) }
     var isFinancierError by remember { mutableStateOf(false) }
+    var notice by remember { mutableStateOf("") }
+    var toastError by remember { mutableStateOf(false) }
 //    if (LocalWindowSize.current == WindowSize.EXPAND){
-        Column(modifier) {
+    Column(modifier, verticalArrangement = Arrangement.SpaceBetween) {
+        Column {
             Row {
                 inputTextFiled(
                     title,
@@ -69,9 +70,9 @@ fun addView( modifier: Modifier = Modifier,financiers: List<Financier>,onSaveBut
                 inputTextFiled(
                     numberOfPack,
                     onValueChange = {
-                        numberOfPack = TextUtils.onlyNumberString(it)
+                        numberOfPack = TextUtils.showNumberString(it)
                         if (totalPurchasePrice.isNotEmpty() && numberOfItem.isNotEmpty())
-                            purchasePricePerItem = PriceUtils.calculatePrice(numberOfPack.toInt(),numberOfItem.toInt(),totalPurchasePrice.toInt()).toString()
+                            purchasePricePerItem = PriceUtils.calculatePrice(numberOfPack.toInt(),numberOfItem.toDouble(),totalPurchasePrice.toInt()).toString()
                     },
                     label ="تعداد بسته",
                     modifier = Modifier.weight(1f),
@@ -83,9 +84,9 @@ fun addView( modifier: Modifier = Modifier,financiers: List<Financier>,onSaveBut
                 inputTextFiled(
                     numberOfItem,
                     onValueChange = {
-                        numberOfItem = TextUtils.onlyNumberString(it)
+                        numberOfItem = TextUtils.doubleNumberString(it)
                         if (totalPurchasePrice.isNotEmpty() && numberOfPack.isNotEmpty())
-                            purchasePricePerItem = PriceUtils.calculatePrice(numberOfPack.toInt(),numberOfItem.toInt(),totalPurchasePrice.toInt()).toString()
+                            purchasePricePerItem = PriceUtils.calculatePrice(numberOfPack.toInt(),numberOfItem.toDouble(),totalPurchasePrice.toInt()).toString()
                     },
                     label ="تعداد آیتم هر بسته",
                     modifier = Modifier.weight(1f),
@@ -95,11 +96,11 @@ fun addView( modifier: Modifier = Modifier,financiers: List<Financier>,onSaveBut
                 inputTextFiled(
                     TextUtils.addSeparator(totalPurchasePrice),
                     onValueChange = {
-                        totalPurchasePrice = TextUtils.onlyNumberString(it)
+                        totalPurchasePrice = TextUtils.showNumberString(it)
                         if (numberOfPack.isNotEmpty() && numberOfItem.isNotEmpty())
                             purchasePricePerItem = PriceUtils.calculatePrice(
                                 numberOfPack.toInt(),
-                                numberOfItem.toInt(),
+                                numberOfItem.toDouble(),
                                 totalPurchasePrice.toInt()
                             ).toString()
                     },
@@ -111,9 +112,8 @@ fun addView( modifier: Modifier = Modifier,financiers: List<Financier>,onSaveBut
             Spacer(Modifier.size(5.dp))
             Row {
                 inputTextFiled(
-                    TextUtils.addSeparator(purchasePricePerItem),
+                    TextUtils.addSeparator(TextUtils.onlyNumberInput(purchasePricePerItem)),
                     onValueChange = {
-                        purchasePricePerItem = TextUtils.onlyNumberString(it)
                     },
                     label = "قیمت خرید هر آیتم",
                     modifier = Modifier.weight(1f),
@@ -123,7 +123,7 @@ fun addView( modifier: Modifier = Modifier,financiers: List<Financier>,onSaveBut
                 inputTextFiled(
                     TextUtils.addSeparator(salePricePerItem),
                     onValueChange = {
-                        salePricePerItem = TextUtils.onlyNumberString(it)
+                        salePricePerItem = TextUtils.showNumberString(it)
                     },
                     label ="قیمت فروش هر آیتم",
                     modifier = Modifier.weight(1f),
@@ -176,20 +176,30 @@ fun addView( modifier: Modifier = Modifier,financiers: List<Financier>,onSaveBut
                     }
 
                     if (isTitleError||isNumberOfItemError||isNumberOfPackError||isTotalPriceError||isSalePriceError||isFinancierError){
-                        return@Button
+                        toastError = true
+                        notice = "فیلد های قرمز را پر کنید"
+                    } else {
+                        val product = Product(
+                            title = title,
+                            quantity = quantity,
+                            purchasePrice = purchasePrice,
+                            salePrice = salePrice,
+                            owner = owner?.name ?: ""
+                        )
+                        onSaveButtonClicked(product, totalPurchasePrice.toInt(), date)
+                        toastError = false
+                        notice = "با موفقیت ثبت شد."
+                        clearInputs()
                     }
-                    val product = Product(title = title,
-                        quantity = quantity,
-                        purchasePrice = purchasePrice,
-                        salePrice = salePrice,
-                        owner = owner?.name?:""
-                    )
-                    onSaveButtonClicked(product,totalPurchasePrice.toInt(),date)
-                    clearInputs()
-                }){
+                    scope.launch {
+                        toastState.showSnackbar(notice)
+                    }
+                }) {
                 Text("ثبت")
             }
         }
+        toast(toastState,toastError)
+    }
 //    } else {
 //        Column(modifier) {
 //            Row {

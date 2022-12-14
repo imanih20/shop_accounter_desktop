@@ -40,7 +40,7 @@ fun saleListHeader(){
                     .weight(1f)
             )
             listItemText(
-                "تاریخ",
+                "تاریخ فروش",
                 Modifier
                     .weight(1f)
             )

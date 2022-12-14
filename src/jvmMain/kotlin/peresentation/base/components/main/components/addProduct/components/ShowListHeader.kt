@@ -40,11 +40,6 @@ fun showListHeader(){
                     .weight(1f)
             )
             listItemText(
-                "صاحب",
-                Modifier
-                    .weight(1f)
-            )
-            listItemText(
                 "تاریخ خرید",
                 Modifier
                     .weight(1f)

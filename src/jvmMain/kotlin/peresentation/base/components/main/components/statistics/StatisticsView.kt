@@ -22,7 +22,10 @@ fun statisticsView(){
     val scope = rememberCoroutineScope()
     suspend fun refreshStatisticList(financier: String){
         controller.getFinStatistics(financier).collect {
-            statisticList.reAssign(it).sortBy {st->
+            statisticList.reAssign(it).sortBy { st->
+                st.month
+            }
+            statisticList.sortBy { st->
                 st.year
             }
         }

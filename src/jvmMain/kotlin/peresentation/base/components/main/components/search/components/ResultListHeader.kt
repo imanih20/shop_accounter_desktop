@@ -38,7 +38,7 @@ fun resultListHeader(modifier : Modifier = Modifier){
             listItemText("تعداد", Modifier.weight(1f).align(Alignment.CenterVertically))
             listItemText("قیمت خرید", Modifier.weight(1f).align(Alignment.CenterVertically))
             listItemText("قیمت فروش", Modifier.weight(1f).align(Alignment.CenterVertically))
-            listItemText("فروشنده", Modifier.weight(1f).align(Alignment.CenterVertically))
+            listItemText("سهم بر", Modifier.weight(1f).align(Alignment.CenterVertically))
             Spacer(Modifier.weight(1f))
         }
     }

@@ -30,7 +30,7 @@ fun editProductDialog(
     var salePrice by remember { mutableStateOf(product.salePrice.toString()) }
     var quantity by remember { mutableStateOf(product.quantity.toString()) }
     var owner by remember { mutableStateOf(product.owner) }
-    Box {
+    Box(Modifier.wrapContentSize()) {
         AlertDialog(
             {onCloseRequest()},
             text = {
@@ -50,7 +50,7 @@ fun editProductDialog(
                             inputTextFiled(
                                 quantity,
                                 {
-                                    quantity = TextUtils.onlyNumberString(it)
+                                    quantity = TextUtils.doubleNumberString(it)
                                     isEdited = true
                                 },
                                 modifier = Modifier.weight(1f),
@@ -62,7 +62,7 @@ fun editProductDialog(
                             inputTextFiled(
                                 TextUtils.addSeparator(purchasePrice),
                                 {
-                                    purchasePrice = TextUtils.onlyNumberString(it)
+                                    purchasePrice = TextUtils.showNumberString(it)
                                     isEdited = true
                                 },
                                 label = "قیمت خرید"
@@ -71,22 +71,23 @@ fun editProductDialog(
                             inputTextFiled(
                                 TextUtils.addSeparator(salePrice),
                                 {
-                                    salePrice = TextUtils.onlyNumberString(it)
+                                    salePrice = TextUtils.showNumberString(it)
                                     isEdited = true
                                 },
                                 label = "قیمت فروش"
                             )
+                            Spacer(Modifier.size(5.dp))
+                            dropDownTextFiled(
+                                Modifier.weight(1f),
+                                financiers,
+                                label = "صاحب کالا",
+                                onItemSelected = {
+                                    owner = it?.toString() ?: ""
+                                    isEdited = true
+                                },
+                                enabled = financiers.size > 1,
+                            )
                         }
-                        dropDownTextFiled(
-                            Modifier.weight(1f),
-                            financiers,
-                            label = "صاحب کالا",
-                            onItemSelected = {
-                                owner = it?.toString() ?: ""
-                                isEdited = true
-                            },
-                            enabled = financiers.size > 1,
-                        )
                     }
                 }
             },

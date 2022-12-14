@@ -1,11 +1,13 @@
 package peresentation.base.components.main
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import common.consts.GRAY
 import peresentation.base.components.main.components.addProduct.addProductView
 import peresentation.base.components.main.components.financiers.financierManagerView
 import peresentation.base.components.main.components.saleProduct.saleProductView
@@ -18,7 +20,8 @@ fun mainView(selectedItem: MenuItems,modifier: Modifier = Modifier){
     Card(
         modifier
             .fillMaxWidth()
-            .fillMaxHeight(),
+            .fillMaxHeight()
+            .background(GRAY),
         shape = RoundedCornerShape(20.dp)
     ) {
         when(selectedItem){
@@ -27,7 +30,6 @@ fun mainView(selectedItem: MenuItems,modifier: Modifier = Modifier){
             MenuItems.FINANCIER-> financierManagerView()
             MenuItems.STATISTICS-> statisticsView()
             MenuItems.SEARCH-> searchView()
-            else -> {}
         }
     }
 }

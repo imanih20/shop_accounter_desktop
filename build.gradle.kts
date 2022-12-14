@@ -4,10 +4,38 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
+    id("dev.hydraulic.conveyor")
 }
 
 group = "com.mohyeddin"
-version = "1.0-SNAPSHOT"
+version = "1.0.1"
+// region Work around temporary Compose bugs.
+configurations.all {
+    attributes {
+        // https://github.com/JetBrains/compose-jb/issues/1404#issuecomment-1146894731
+        attribute(Attribute.of("ui", String::class.java), "awt")
+    }
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+ //Force override the Kotlin stdlib version used by Compose to 1.7, as otherwise we can end up with a mix of 1.6 and 1.7 on our classpath.
+dependencies {
+    linuxAmd64(compose.desktop.linux_x64)
+    macAmd64(compose.desktop.macos_x64)
+    macAarch64(compose.desktop.macos_arm64)
+    windowsAmd64(compose.desktop.windows_x64)
+    val v = "1.7.20"
+    for (m in setOf("linuxAmd64", "macAmd64", "macAarch64", "windowsAmd64")) {
+        m("org.jetbrains.kotlin:kotlin-stdlib:$v")
+        m("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$v")
+        m("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$v")
+    }
+}
 
 repositories {
     google()
@@ -28,6 +56,7 @@ kotlin {
     sourceSets {
         val jvmMain by getting {
             dependencies {
+                implementation(kotlin("stdlib-jdk8"))
                 implementation(compose.desktop.currentOs)
                 implementation("br.com.devsrsouza.compose.icons.jetbrains:font-awesome:1.0.0")
                 implementation("ir.huri:JalaliCalendar:1.3.3")
@@ -48,8 +77,9 @@ compose.desktop {
         mainClass = "MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Exe, TargetFormat.Deb)
-            packageName = "Accounter"
+            packageName = "accounter"
             packageVersion = "1.0.0"
+            includeAllModules = true
         }
     }
 }

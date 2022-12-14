@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -20,9 +21,6 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.unit.dp
 import common.utils.TextUtils
-import compose.icons.FontAwesomeIcons
-import compose.icons.fontawesomeicons.Solid
-import compose.icons.fontawesomeicons.solid.Tag
 import domain.product.model.Product
 import peresentation.common.components.listItemText
 
@@ -34,12 +32,13 @@ fun resultItemView(modifier: Modifier = Modifier,product: Product,onEditClicked:
         modifier
             .onPointerEvent(PointerEventType.Enter){activate = true }
             .onPointerEvent(PointerEventType.Exit){activate = false},
-        elevation = 3.dp,
-        shape = RoundedCornerShape(3.dp)
+        elevation = 5.dp,
+        shape = RoundedCornerShape(5.dp),
+        backgroundColor = if (product.quantity<=0) Color.Gray else MaterialTheme.colors.background
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(5.dp)) {
             listItemText(product.title,Modifier.weight(1f).align(Alignment.CenterVertically))
-            listItemText(TextUtils.onlyNumberString(product.quantity.toString()),Modifier.weight(1f).align(Alignment.CenterVertically))
+            listItemText(TextUtils.showNumberString(product.quantity.toString()),Modifier.weight(1f).align(Alignment.CenterVertically))
             listItemText(TextUtils.addSeparator(product.purchasePrice.toString()),Modifier.weight(1f).align(Alignment.CenterVertically))
             listItemText(TextUtils.addSeparator(product.salePrice.toString()),Modifier.weight(1f).align(Alignment.CenterVertically))
             listItemText(product.owner,Modifier.weight(1f).align(Alignment.CenterVertically))

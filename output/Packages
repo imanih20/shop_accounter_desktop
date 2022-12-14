@@ -1,0 +1,14 @@
+Architecture: amd64
+Built-With: Hydraulic Conveyor
+Depends: libxi6, libasound2 | liboss4-salsa-asound2, libx11-6, libgcc-s1, libgl1 | nvidia-340, libxtst6, zlib1g, libfontconfig1, libxext6, libc6, libfreetype6, libxrender1, libstdc++6
+Description: accounter
+Installed-Size: 128067
+Maintainer: <nobody@github.com>
+Package: accounter
+Priority: optional
+Provides: accounter
+Section: misc
+Version: 1.0.1
+Filename: ./accounter_1.0.1_amd64.deb
+Size: 52406728
+SHA256: 4b94b43cbc71d928d8322e4cdff44c07b441ee2635e2df2e010be40778a7b915

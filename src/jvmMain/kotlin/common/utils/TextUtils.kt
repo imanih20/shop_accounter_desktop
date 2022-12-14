@@ -3,7 +3,39 @@ package common.utils
 import kotlin.text.StringBuilder
 
 object TextUtils {
-    fun onlyNumberString(text: String): String {
+    fun doubleNumberString(text: String) : String{
+        val stringBuilder = StringBuilder()
+        val chars = text.toCharArray()
+        var dotCount = 0
+        chars.forEach {
+            if (it.isDigit() || it == '.'){
+                if (it=='.'){
+                    dotCount++
+                    if (dotCount<=1) {
+                        stringBuilder.append(it)
+                    }
+                } else {
+                    stringBuilder.append(it)
+                }
+
+            }
+        }
+        return stringBuilder.toString()
+    }
+    fun onlyNumberInput(text: String) : String{
+        val stringBuilder = StringBuilder()
+        val chars = text.toCharArray()
+        for (c in chars){
+            if (c == '.'){
+                break
+            }
+            if (c.isDigit()){
+                stringBuilder.append(c)
+            }
+        }
+        return stringBuilder.toString()
+    }
+    fun showNumberString(text: String): String {
         val stringBuilder = StringBuilder()
         val chars = text.toCharArray()
         var dotCount = 0

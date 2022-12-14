@@ -21,6 +21,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import common.consts.GRAY
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.*
@@ -39,38 +41,44 @@ fun menuView(modifier: Modifier = Modifier,onMenuItemSelected: (item: MenuItems)
     var selected by remember { mutableStateOf(MenuItems.PURCHASE) }
     var activate by remember { mutableStateOf(false) }
     onMenuItemSelected(selected)
-    Column(
-        modifier
-            .wrapContentSize()
-            .fillMaxHeight()
-            .background(MaterialTheme.colors.secondary)
-            .padding(vertical = 15.dp, horizontal = 5.dp)
-            .onPointerEvent(PointerEventType.Enter){ activate  = true }
-            .onPointerEvent(PointerEventType.Exit){activate = false}
-        ,
-        horizontalAlignment = Alignment.Start,
-    ) {
+    BoxWithConstraints(modifier.wrapContentSize()) {
+
+        Column(
+            Modifier
+                .fillMaxHeight()
+                .background(GRAY)
+                .padding(vertical = 15.dp, horizontal = 10.dp)
+                .onPointerEvent(PointerEventType.Enter){
+                    activate  = true
+                }
+                .onPointerEvent(PointerEventType.Exit){activate = false}
+            ,
+            horizontalAlignment = Alignment.Start,
+        ) {
+            val itemModifier = Modifier
 //        Icon(Icons.Filled.Menu,"",Modifier.size(35.dp).align(Alignment.CenterHorizontally))
 //        Spacer(Modifier.size(25.dp))
-        menuItem(Modifier,FontAwesomeIcons.Solid.ShoppingCart, "خرید", selected == MenuItems.PURCHASE, activate){
-            selected = MenuItems.PURCHASE
+            menuItem(itemModifier,FontAwesomeIcons.Solid.ShoppingCart, "خرید", selected == MenuItems.PURCHASE, activate){
+                selected = MenuItems.PURCHASE
+            }
+            Spacer(Modifier.size(10.dp))
+            menuItem(itemModifier, FontAwesomeIcons.Solid.ShoppingBag,"فروش", selected == MenuItems.SALE, activate){
+                selected = MenuItems.SALE
+            }
+            Spacer(Modifier.size(10.dp))
+            menuItem(itemModifier, FontAwesomeIcons.Solid.User, "سهام داران", selected == MenuItems.FINANCIER, activate){
+                selected = MenuItems.FINANCIER
+            }
+            Spacer(Modifier.size(10.dp))
+            menuItem(itemModifier, FontAwesomeIcons.Solid.ChartLine, "آمار", selected == MenuItems.STATISTICS, activate){
+                selected = MenuItems.STATISTICS
+            }
+            Spacer(Modifier.size(10.dp))
+            menuItem(itemModifier, FontAwesomeIcons.Solid.Search, "جستجو", selected == MenuItems.SEARCH, activate){
+                selected = MenuItems.SEARCH
+            }
         }
-        Spacer(Modifier.size(10.dp))
-        menuItem(Modifier, FontAwesomeIcons.Solid.ShoppingBag,"فروش", selected == MenuItems.SALE, activate){
-            selected = MenuItems.SALE
-        }
-        Spacer(Modifier.size(10.dp))
-        menuItem(Modifier, FontAwesomeIcons.Solid.User, "فروشندگان", selected == MenuItems.FINANCIER, activate){
-            selected = MenuItems.FINANCIER
-        }
-        Spacer(Modifier.size(10.dp))
-        menuItem(Modifier, FontAwesomeIcons.Solid.ChartLine, "آمار", selected == MenuItems.STATISTICS, activate){
-            selected = MenuItems.STATISTICS
-        }
-        Spacer(Modifier.size(10.dp))
-        menuItem(Modifier, FontAwesomeIcons.Solid.Search, "جستجو", selected == MenuItems.SEARCH, activate){
-            selected = MenuItems.SEARCH
-        }
+
     }
 }
 
@@ -86,22 +94,27 @@ fun menuItem(
     Row(
         modifier
             .clickable { onClick() }
-            .background(
-                if (selected)
-                    MaterialTheme.colors.primary
-                else
-                    MaterialTheme.colors.secondary,
-                shape = RoundedCornerShape(10.dp)
-            )
-            .padding(8.dp),
+        ,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            icon,
-            "",
-            tint = if (selected) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSecondary,
-            modifier = Modifier.size(25.dp)
-        )
+        Box(
+            Modifier
+                .background(
+                    if (selected)
+                        MaterialTheme.colors.primary
+                    else
+                        MaterialTheme.colors.background,
+                    shape = RoundedCornerShape(10.dp)
+                )
+                .padding(8.dp)
+        ){
+            Icon(
+                icon,
+                "",
+                tint = if (selected) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onBackground,
+                modifier = Modifier.size(25.dp)
+            )
+        }
 //        if (activate)
         AnimatedVisibility(
             visible = activate,
@@ -117,7 +130,8 @@ fun menuItem(
         ){
             Text(
                 title,
-                color = if (selected) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSecondary,
+                color = if (selected) MaterialTheme.colors.primary else MaterialTheme.colors.onBackground,
+                fontSize = 20.sp
             )
         }
     }

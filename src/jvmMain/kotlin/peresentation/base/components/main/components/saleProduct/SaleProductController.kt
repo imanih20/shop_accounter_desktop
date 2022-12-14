@@ -4,7 +4,6 @@ import common.utils.Controller
 import domain.financier.model.Financier
 import domain.financier.usecases.GetFinancierUseCase
 import domain.product.model.Product
-import domain.product.usecase.EditProductUseCase
 import domain.product.usecase.GetAllProductsUseCase
 import domain.product.usecase.ReduceProductQuantityUseCase
 import domain.statistic.model.Statistic
@@ -14,7 +13,6 @@ import domain.trade.usecase.AddTradeUseCase
 import domain.trade.usecase.DeleteTradeUseCase
 import domain.trade.usecase.GetSalesOfDayUseCase
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 
 class SaleProductController(
     private val addTrade : AddTradeUseCase,

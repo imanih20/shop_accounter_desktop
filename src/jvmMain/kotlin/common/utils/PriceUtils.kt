@@ -1,8 +1,8 @@
 package common.utils
 
 object PriceUtils {
-    fun calculatePrice(numberOfPack: Int,numberOfItem: Int,totalPrice: Int) : Int {
+    fun calculatePrice(numberOfPack: Int,numberOfItem: Double,totalPrice: Int) : Int {
         val itemNumber = numberOfPack * numberOfItem
-        return totalPrice / itemNumber
+        return (totalPrice / itemNumber).toInt()
     }
 }

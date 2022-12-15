@@ -11,12 +11,11 @@ import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object DbUtils {
-    fun configureDb(){
-        Database.connect("jdbc:sqlite:data/data.db", "org.sqlite.JDBC")
-        // https://github.com/JetBrains/Exposed/wiki/FAQ
+    fun configureDb() {
+        Database.connect("jdbc:h2:./myh2file", "org.h2.Driver")        // https://github.com/JetBrains/Exposed/wiki/FAQ
         transaction {
             addLogger(StdOutSqlLogger)
-            SchemaUtils.create(FinancierEntity,ProductEntity,TradeEntity,StatisticEntity)
+            SchemaUtils.create(FinancierEntity, ProductEntity, TradeEntity, StatisticEntity)
         }
     }
 }

@@ -3,27 +3,30 @@ package domain.trade.model
 import data.trade.model.TradeEntity
 import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.ResultRow
-enum class TradeType{
-    SALE,PURCHASE,NOTHING;
-    companion object{
-        fun getFromString(type: String) : TradeType {
-            return when(type){
-                "sale"-> SALE
-                "purchase"->PURCHASE
-                else->NOTHING
+
+enum class TradeType {
+    SALE, PURCHASE, NOTHING;
+
+    companion object {
+        fun getFromString(type: String): TradeType {
+            return when (type) {
+                "sale" -> SALE
+                "purchase" -> PURCHASE
+                else -> NOTHING
             }
         }
 
-        fun getString(type: TradeType) : String{
-            return when(type){
-                SALE->"sale"
-                PURCHASE->"purchase"
-                else->""
+        fun getString(type: TradeType): String {
+            return when (type) {
+                SALE -> "sale"
+                PURCHASE -> "purchase"
+                else -> ""
             }
         }
 
     }
 }
+
 data class ProductTrade(
     val id: Int = 0,
     val title: String,
@@ -35,7 +38,7 @@ data class ProductTrade(
     val owner: String
 ) {
     companion object {
-        fun getTradeFromResult(result: ResultRow) : ProductTrade{
+        fun getTradeFromResult(result: ResultRow): ProductTrade {
             return ProductTrade(
                 result[TradeEntity.id].value,
                 result[TradeEntity.title],
@@ -48,7 +51,7 @@ data class ProductTrade(
             )
         }
 
-        fun getTradeFromQuery(query: Query) : List<ProductTrade>{
+        fun getTradeFromQuery(query: Query): List<ProductTrade> {
             val list = arrayListOf<ProductTrade>()
             query.forEach {
                 list.add(

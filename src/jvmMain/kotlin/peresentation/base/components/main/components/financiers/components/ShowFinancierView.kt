@@ -13,33 +13,38 @@ import domain.financier.model.Financier
 import peresentation.common.components.deleteDialog
 
 @Composable
-fun showFinanciers(modifier: Modifier = Modifier, list: List<Financier>,onEditRequest:(Financier)->Unit,onDeleteRequest:(Int)->Unit){
+fun showFinanciers(
+    modifier: Modifier = Modifier,
+    list: List<Financier>,
+    onEditRequest: (Financier) -> Unit,
+    onDeleteRequest: (Int) -> Unit
+) {
     var editVisible by remember { mutableStateOf(false) }
     var deleteVisible by remember { mutableStateOf(false) }
     var financier by remember { mutableStateOf<Financier?>(null) }
     var id by remember { mutableStateOf(0) }
-    Box(modifier){
-        if (deleteVisible) deleteDialog({deleteVisible = false}) {
+    Box(modifier) {
+        if (deleteVisible) deleteDialog({ deleteVisible = false }) {
             onDeleteRequest(id)
             deleteVisible = false
         }
-        if (editVisible) editFinancierDialog({editVisible=false},
+        if (editVisible) editFinancierDialog({ editVisible = false },
             financier!!,
             onPositiveButtonClicked = {
-                if (it!=null){
+                if (it != null) {
                     onEditRequest(it)
                 }
                 editVisible = false
             }
         )
         LazyColumn(Modifier.padding(10.dp)) {
-            items(list){
+            items(list) {
                 financierListItem(financier = it,
-                    onEditClicked = {f->
+                    onEditClicked = { f ->
                         financier = f
                         editVisible = true
                     },
-                    onDeleteClicked = {i->
+                    onDeleteClicked = { i ->
                         id = i
                         deleteVisible = true
                     }

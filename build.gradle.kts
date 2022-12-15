@@ -1,4 +1,3 @@
-import org.gradle.internal.component.model.Exclude
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
@@ -8,7 +7,7 @@ plugins {
 }
 
 group = "com.mohyeddin"
-version = "1.0.1"
+version = "1.1.0"
 // region Work around temporary Compose bugs.
 configurations.all {
     attributes {
@@ -23,7 +22,7 @@ java {
     }
 }
 
- //Force override the Kotlin stdlib version used by Compose to 1.7, as otherwise we can end up with a mix of 1.6 and 1.7 on our classpath.
+//Force override the Kotlin stdlib version used by Compose to 1.7, as otherwise we can end up with a mix of 1.6 and 1.7 on our classpath.
 dependencies {
     linuxAmd64(compose.desktop.linux_x64)
     macAmd64(compose.desktop.macos_x64)
@@ -61,6 +60,7 @@ kotlin {
                 implementation("br.com.devsrsouza.compose.icons.jetbrains:font-awesome:1.0.0")
                 implementation("ir.huri:JalaliCalendar:1.3.3")
                 implementation("org.xerial:sqlite-jdbc:3.30.1")
+                implementation("com.h2database:h2:2.1.214")
                 implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
                 implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
                 implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
@@ -78,7 +78,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Exe, TargetFormat.Deb)
             packageName = "accounter"
-            packageVersion = "1.0.0"
+            packageVersion = "1.1.0"
             includeAllModules = true
         }
     }

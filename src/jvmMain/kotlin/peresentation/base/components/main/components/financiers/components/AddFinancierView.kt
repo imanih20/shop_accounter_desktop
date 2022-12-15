@@ -1,11 +1,13 @@
 package peresentation.base.components.main.components.financiers.components
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import common.consts.SPACER_SIZE
 import common.utils.TextUtils
 import domain.financier.model.Financier
 import kotlinx.coroutines.flow.Flow
@@ -14,10 +16,10 @@ import peresentation.common.components.inputTextFiled
 import peresentation.common.components.toast
 
 @Composable
-fun addFinancier(modifier: Modifier = Modifier, saveFinancier: (Financier)->Flow<Boolean>){
-    var name : String by remember { mutableStateOf("") }
+fun addFinancier(modifier: Modifier = Modifier, saveFinancier: (Financier) -> Flow<Boolean>) {
+    var name: String by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
-    var share : String by remember { mutableStateOf("") }
+    var share: String by remember { mutableStateOf("") }
     //ui actions
     var isNameError by remember { mutableStateOf(false) }
     var isShareError by remember { mutableStateOf(false) }
@@ -25,7 +27,7 @@ fun addFinancier(modifier: Modifier = Modifier, saveFinancier: (Financier)->Flow
     var toastError by remember { mutableStateOf(false) }
     val hostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    fun clearInputs(){
+    fun clearInputs() {
         name = ""
         description = ""
         share = ""
@@ -35,24 +37,24 @@ fun addFinancier(modifier: Modifier = Modifier, saveFinancier: (Financier)->Flow
             Row(Modifier.fillMaxWidth()) {
                 inputTextFiled(
                     name,
-                    {name = it},
+                    { name = it },
                     label = "نام",
                     modifier = Modifier.weight(2f),
                     isError = isNameError
                 )
-                Spacer(Modifier.size(5.dp))
+                Spacer(Modifier.size(SPACER_SIZE))
                 inputTextFiled(
                     share,
-                    {share = TextUtils.showNumberString(it)},
+                    { share = TextUtils.showNumberString(it) },
                     label = "درصد سود",
                     modifier = Modifier.weight(1f),
                     isError = isShareError
                 )
             }
-            Spacer(Modifier.size(5.dp))
+            Spacer(Modifier.size(SPACER_SIZE))
             inputTextFiled(
                 description,
-                {description = it},
+                { description = it },
                 label = "توضیحات (اختیاری)",
                 modifier = Modifier.fillMaxWidth(),
                 lines = 4
@@ -60,7 +62,7 @@ fun addFinancier(modifier: Modifier = Modifier, saveFinancier: (Financier)->Flow
             Button({
                 isNameError = name.isEmpty()
                 isShareError = share.isEmpty()
-                if (!isNameError&&!isShareError) {
+                if (!isNameError && !isShareError) {
                     val financier = Financier(name = name, description = description, share = share.toInt())
                     scope.launch {
                         saveFinancier(financier).collect {
@@ -81,10 +83,10 @@ fun addFinancier(modifier: Modifier = Modifier, saveFinancier: (Financier)->Flow
                 scope.launch {
                     hostState.showSnackbar(notice)
                 }
-            }, Modifier.align(Alignment.End)){
+            }, Modifier.align(Alignment.End)) {
                 Text("ثبت")
             }
         }
-        toast(hostState,toastError)
+        toast(hostState, toastError)
     }
 }

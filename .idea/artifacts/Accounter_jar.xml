@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="Accounter:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Accounter_jar</output-path>
+    <root id="archive" name="Accounter.jar" />
+  </artifact>
+</component>

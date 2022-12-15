@@ -10,17 +10,22 @@ import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import common.consts.SPACER_SIZE
 import domain.trade.model.ProductTrade
 import peresentation.common.components.deleteDialog
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun showProductView(purchaseList: List<ProductTrade>, modifier: Modifier = Modifier,onDeleteItemRequest:(Int)->Unit) {
+fun showProductView(
+    purchaseList: List<ProductTrade>,
+    modifier: Modifier = Modifier,
+    onDateChanged: (String)->Unit,
+    onDeleteItemRequest: (Int) -> Unit
+) {
     var id by remember { mutableStateOf(0) }
     var visible by remember { mutableStateOf(false) }
     Box(modifier) {
-        if (visible) deleteDialog({visible = false}) {
+        if (visible) deleteDialog({ visible = false }) {
             onDeleteItemRequest(id)
             visible = false
         }
@@ -29,14 +34,16 @@ fun showProductView(purchaseList: List<ProductTrade>, modifier: Modifier = Modif
             state = state
         ) {
             stickyHeader {
-                showListHeader()
+                showListHeader(){
+                    onDateChanged(it)
+                }
             }
-            items(purchaseList){
-                showListItem(it){i->
+            items(purchaseList) {
+                showListItem(it) { i ->
                     visible = true
                     id = i
                 }
-                Spacer(Modifier.size(5.dp))
+                Spacer(Modifier.size(SPACER_SIZE))
             }
         }
         VerticalScrollbar(

@@ -12,17 +12,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import domain.trade.model.ProductTrade
-import peresentation.base.components.main.components.saleProduct.SaleProductController
 import peresentation.common.components.deleteDialog
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun showView(saleList: List<ProductTrade>, modifier: Modifier = Modifier,onDeleteRequest: (Int)->Unit) {
+fun showView(saleList: List<ProductTrade>, modifier: Modifier = Modifier,onDateChanged: (String)->Unit, onDeleteRequest: (Int) -> Unit) {
     var visible by remember { mutableStateOf(false) }
     var id by remember { mutableStateOf(0) }
     Box(modifier) {
         val state = rememberLazyListState()
-        if (visible) deleteDialog({visible = false}) {
+        if (visible) deleteDialog({ visible = false }) {
             onDeleteRequest(id)
             visible = false
         }
@@ -30,11 +29,13 @@ fun showView(saleList: List<ProductTrade>, modifier: Modifier = Modifier,onDelet
             state = state
         ) {
             stickyHeader {
-                saleListHeader()
+                saleListHeader{
+                    onDateChanged(it)
+                }
             }
-            items(saleList){
+            items(saleList) {
 
-                listItem(it){i->
+                listItem(it) { i ->
                     id = i
                     visible = true
                 }

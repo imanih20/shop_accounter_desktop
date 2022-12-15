@@ -5,10 +5,8 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import domain.financier.model.Financier
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
-import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.koin.java.KoinJavaComponent.inject
 import peresentation.base.components.main.components.addProduct.reAssign
 import peresentation.base.components.main.components.financiers.components.addFinancier
@@ -17,11 +15,11 @@ import peresentation.common.components.adaptiveLayout
 
 @Composable
 fun financierManagerView() {
-    val controller : FinancierViewController by inject(FinancierViewController::class.java)
+    val controller: FinancierViewController by inject(FinancierViewController::class.java)
     val scope = rememberCoroutineScope()
     val financierList = remember { mutableStateListOf<Financier>() }
-    suspend fun refreshList(){
-        controller.getFinanciers().collect{
+    suspend fun refreshList() {
+        controller.getFinanciers().collect {
             financierList.reAssign(it)
         }
     }
@@ -30,10 +28,10 @@ fun financierManagerView() {
     }
     adaptiveLayout(
         {
-            addFinancier(it){financier->
+            addFinancier(it) { financier ->
                 flow {
                     var isSucceed = true
-                    controller.saveFinancier(financier).collect {b->
+                    controller.saveFinancier(financier).collect { b ->
                         isSucceed = b
                     }
                     refreshList()
@@ -42,22 +40,24 @@ fun financierManagerView() {
 
             }
         },
-        {showFinanciers(
-            it,
-            financierList,
-            {financier->
-                scope.launch {
-                    controller.updateFinancier(financier)
-                    refreshList()
+        {
+            showFinanciers(
+                it,
+                financierList,
+                { financier ->
+                    scope.launch {
+                        controller.updateFinancier(financier)
+                        refreshList()
+                    }
+                },
+                { id ->
+                    scope.launch {
+                        controller.deleteFinancier(id)
+                        refreshList()
+                    }
                 }
-            },
-            {id->
-                scope.launch {
-                    controller.deleteFinancier(id)
-                    refreshList()
-                }
-            }
-        )}
+            )
+        }
     )
 }
 

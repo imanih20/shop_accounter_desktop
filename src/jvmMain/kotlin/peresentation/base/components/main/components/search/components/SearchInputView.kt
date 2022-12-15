@@ -4,39 +4,41 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Button
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import common.consts.SPACER_SIZE
 import domain.financier.model.Financier
 import peresentation.common.components.dropDownTextFiled
 import peresentation.common.components.inputTextFiled
 
 
 @Composable
-fun searchInputView(modifier: Modifier = Modifier, financiers: List<Financier>, onQueryChange: (query:String, owner:String)->Unit) {
+fun searchInputView(
+    modifier: Modifier = Modifier,
+    financiers: List<Financier>,
+    onQueryChange: (query: String, owner: String) -> Unit
+) {
     var owner by remember { mutableStateOf("") }
     var query by remember { mutableStateOf("") }
-    Column (modifier){
+    Column(modifier) {
         Row {
             inputTextFiled(
                 query,
                 {
                     query = it
-                    onQueryChange(it,owner)
+                    onQueryChange(it, owner)
                 },
-                label = "اسم کالای مورد نظر  را وارد کنید"
+                label = "اسم کالای مورد نظر را وارد کنید",
+                modifier = Modifier.weight(1f)
             )
-            Spacer(Modifier.size(5.dp))
+            Spacer(Modifier.size(SPACER_SIZE))
             dropDownTextFiled(
                 Modifier.weight(1f),
                 financiers,
-                label = "صاحب کالا",
+                label = "سهامدار مورد نظر را انتخاب کنید",
                 onItemSelected = {
                     owner = it?.toString() ?: ""
-                    onQueryChange(query,owner)
+                    onQueryChange(query, owner)
                 },
                 enabled = financiers.size > 1,
             )

@@ -19,6 +19,8 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import common.consts.CARD_ELEVATION
+import common.consts.CORNER_RADIUS
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.User
@@ -29,24 +31,24 @@ import domain.financier.model.Financier
 fun financierListItem(
     modifier: Modifier = Modifier,
     financier: Financier,
-    onEditClicked: (Financier)->Unit,
-    onDeleteClicked: (Int)->Unit
+    onEditClicked: (Financier) -> Unit,
+    onDeleteClicked: (Int) -> Unit
 ) {
-    var activate by remember{ mutableStateOf(false) }
+    var activate by remember { mutableStateOf(false) }
     Card(
         modifier
-            .onPointerEvent(PointerEventType.Enter){activate = true}
-            .onPointerEvent(PointerEventType.Exit){activate = false},
-        elevation = 5.dp,
-        shape = RoundedCornerShape(10.dp),
+            .onPointerEvent(PointerEventType.Enter) { activate = true }
+            .onPointerEvent(PointerEventType.Exit) { activate = false },
+        elevation = CARD_ELEVATION,
+        shape = RoundedCornerShape(CORNER_RADIUS),
     ) {
         ListItem(
             icon = {
                 Box(
                     Modifier
-                        .border(1.dp, Color.Black,shape = CircleShape)
+                        .border(1.dp, Color.Black, shape = CircleShape)
                         .padding(10.dp)
-                ){
+                ) {
                     Icon(
                         FontAwesomeIcons.Solid.User,
                         "",
@@ -58,7 +60,7 @@ fun financierListItem(
                 }
             },
             text = { Text(financier.name, fontSize = 19.sp) },
-            secondaryText = {Text(financier.description +" درصد سود ${financier.share} درصد")},
+            secondaryText = { Text(financier.description + " درصد سود ${financier.share} درصد") },
             trailing = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     if (activate) {

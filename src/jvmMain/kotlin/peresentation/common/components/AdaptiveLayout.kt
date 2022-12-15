@@ -11,10 +11,10 @@ import androidx.compose.ui.unit.dp
 import common.utils.WindowSize
 
 @Composable
-fun adaptiveLayout(content1: @Composable (Modifier) -> Unit,content2: @Composable (Modifier) -> Unit){
+fun adaptiveLayout(content1: @Composable (Modifier) -> Unit, content2: @Composable (Modifier) -> Unit) {
     val color = 0xaaffff
     if (LocalWindowSize.current == WindowSize.EXPAND)
-        Row (Modifier.padding(20.dp), verticalAlignment = Alignment.Top){
+        Row(Modifier.padding(20.dp), verticalAlignment = Alignment.Top) {
             content1(Modifier.fillMaxHeight().fillMaxWidth(0.3f).background(Color(color)).align(Alignment.Top))
             Spacer(Modifier.size(15.dp))
             Box(Modifier.fillMaxHeight().width(1.dp).background(Color.Black))

@@ -9,18 +9,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import domain.statistic.model.Statistic
-import java.util.Arrays
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun showStatisticView(statisticList: List<Statistic>,modifier: Modifier,updateStatistic: (Statistic,Boolean)->Unit){
+fun showStatisticView(
+    statisticList: List<Statistic>,
+    modifier: Modifier,
+    updateStatistic: (Statistic, Boolean) -> Unit
+) {
     LazyColumn(modifier) {
         stickyHeader {
             statisticHeader()
         }
-        items(statisticList){statistic->
-            statisticItem(statistic){isPaid->
-                updateStatistic(statistic,isPaid)
+        items(statisticList) { statistic ->
+            statisticItem(statistic) { isPaid ->
+                updateStatistic(statistic, isPaid)
             }
             Spacer(Modifier.size(5.dp))
         }

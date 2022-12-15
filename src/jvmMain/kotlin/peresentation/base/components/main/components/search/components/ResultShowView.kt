@@ -21,27 +21,27 @@ fun resultShowView(
     modifier: Modifier = Modifier,
     list: List<Product>,
     financiers: List<Financier>,
-    onDeleteRequest: (Int)->Unit,
-    onEditRequest: (Product)->Unit
-    ) {
+    onDeleteRequest: (Int) -> Unit,
+    onEditRequest: (Product) -> Unit
+) {
     var product by remember { mutableStateOf<Product?>(null) }
     var id by remember { mutableStateOf(0) }
     var isEditActivate by remember { mutableStateOf(false) }
     var isDeleteActivate by remember { mutableStateOf(false) }
-    Box(modifier){
+    Box(modifier) {
         if (isEditActivate) editProductDialog(
-            {isEditActivate = false},
+            { isEditActivate = false },
             product!!,
             financiers,
             {
-                if (it!=null){
+                if (it != null) {
                     onEditRequest(it)
                 }
                 isEditActivate = false
             }
         )
         if (isDeleteActivate) deleteDialog(
-            {isDeleteActivate = false},
+            { isDeleteActivate = false },
             {
                 onDeleteRequest(id)
                 isDeleteActivate = false
@@ -51,19 +51,19 @@ fun resultShowView(
             stickyHeader {
                 resultListHeader()
             }
-            items(list){
+            items(list) {
                 resultItemView(
                     product = it,
-                    onEditClicked = {pr->
+                    onEditClicked = { pr ->
                         product = pr
                         isEditActivate = true
                     },
-                    onDeleteClicked = {i->
+                    onDeleteClicked = { i ->
                         id = i
                         isDeleteActivate = true
                     }
                 )
-                Spacer(Modifier.size(5.dp))
+                Spacer(Modifier.size(2.dp))
             }
         }
     }

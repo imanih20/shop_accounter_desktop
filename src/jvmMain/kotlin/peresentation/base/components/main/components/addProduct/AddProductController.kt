@@ -1,11 +1,9 @@
 package peresentation.base.components.main.components.addProduct
 
-import common.utils.Controller
 import domain.financier.model.Financier
 import domain.financier.usecases.GetAllFinanciersUseCase
 import domain.product.model.Product
 import domain.product.usecase.AddProductUseCase
-import domain.product.usecase.DeleteProductUseCase
 import domain.statistic.model.Statistic
 import domain.statistic.usecase.SaveStatisticUseCase
 import domain.trade.model.ProductTrade
@@ -16,7 +14,6 @@ import domain.trade.usecase.GetPurchaseOfDayUseCase
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class AddProductController(
     private val addProduct: AddProductUseCase,
@@ -25,8 +22,8 @@ class AddProductController(
     private val saveStatistic: SaveStatisticUseCase,
     private val getAllFinancier: GetAllFinanciersUseCase,
     private val deleteTradeById: DeleteTradeUseCase
-) : Controller {
-    suspend fun saveProduct(product: Product,totalPurchasePrice: Int,date: String){
+) {
+    suspend fun saveProduct(product: Product, totalPurchasePrice: Int, date: String) {
         val dateFields = date.split("-")
         coroutineScope {
             launch {
@@ -60,15 +57,17 @@ class AddProductController(
             }
         }
     }
-    suspend fun getAllPurchases(date: String) : Flow<List<ProductTrade>> {
+
+    suspend fun getAllPurchases(date: String): Flow<List<ProductTrade>> {
         val dateFields = date.split('-')
-        return getAllPurchasesOfDay(dateFields[0],dateFields[1],dateFields[2])
+        return getAllPurchasesOfDay(dateFields[0], dateFields[1], dateFields[2])
     }
-    suspend fun getFinanciers() : Flow<List<Financier>> {
+
+    suspend fun getFinanciers(): Flow<List<Financier>> {
         return getAllFinancier()
     }
 
-    suspend fun deleteTrade(id: Int){
+    suspend fun deleteTrade(id: Int) {
         deleteTradeById(id)
     }
 }

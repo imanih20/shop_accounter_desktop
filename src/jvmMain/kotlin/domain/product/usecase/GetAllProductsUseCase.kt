@@ -5,7 +5,7 @@ import domain.product.repository.ProductRepository
 import kotlinx.coroutines.flow.Flow
 
 class GetAllProductsUseCase(private val rep: ProductRepository) {
-    suspend operator fun invoke() : Flow<List<Product>>{
+    suspend operator fun invoke(): Flow<List<Product>> {
         return rep.getALLProducts()
     }
 }

@@ -4,11 +4,9 @@ import data.product.model.ProductEntity
 import domain.product.model.Product
 import domain.product.repository.ProductRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class ProductRepositoryImpl : ProductRepository {
@@ -20,9 +18,9 @@ class ProductRepositoryImpl : ProductRepository {
         }
     }
 
-    private fun updateProduct(product: Product){
+    private fun updateProduct(product: Product) {
         transaction {
-            ProductEntity.update({ProductEntity.title eq product.title}) {
+            ProductEntity.update({ ProductEntity.title eq product.title }) {
                 with(SqlExpressionBuilder) {
                     it[title] = product.title
                     it[quantity] = quantity + product.quantity
@@ -33,7 +31,8 @@ class ProductRepositoryImpl : ProductRepository {
             }
         }
     }
-    override suspend fun addProduct(product: Product){
+
+    override suspend fun addProduct(product: Product) {
         transaction {
             ProductEntity.insert {
                 it[title] = product.title
@@ -45,19 +44,8 @@ class ProductRepositoryImpl : ProductRepository {
         }
     }
 
-    override suspend fun getProduct(id: Int): Flow<Product?> {
-        return flow {
-            var product : Product? = null
-            transaction {
-                ProductEntity.select(ProductEntity.id eq id).forEach {
-                    product = Product.getProductFromResult(it)
-                }
-            }
-            emit(product)
-        }
-    }
 
-    override suspend fun getProductId(title: String): Flow<Int> {
+    suspend fun getProductId(title: String): Flow<Int> {
         return flow {
             var id = 0
             transaction {
@@ -79,40 +67,11 @@ class ProductRepositoryImpl : ProductRepository {
         }
     }
 
-    override suspend fun queryProductsByName(title: String, owner: String): Flow<List<Product>> {
-        return flow {
-            val list = arrayListOf<Product>()
-            transaction {
-                list.addAll(
-                    Product.getProductListFromQuery(
-                        ProductEntity.select { (ProductEntity.title like title) and (ProductEntity.owner like owner) }
-                    )
-                )
-            }
-            emit(list)
-        }
-    }
-
-    override suspend fun queryProductsByName(title: String): Flow<List<Product>> {
-        return flow {
-            val list = arrayListOf<Product>()
-            transaction {
-                list.addAll(
-                    Product.getProductListFromQuery(
-                        ProductEntity.select { ProductEntity.title eq title }
-                    )
-                )
-            }
-            emit(list)
-        }
-    }
-
-
     override suspend fun editProduct(product: Product) {
         transaction {
             ProductEntity.update({
                 ProductEntity.id eq product.id
-            }){
+            }) {
                 it[title] = product.title
                 it[quantity] = product.quantity
                 it[purchasePrice] = product.purchasePrice
@@ -132,8 +91,8 @@ class ProductRepositoryImpl : ProductRepository {
 
     override suspend fun reduceProductQuantity(name: String, quantity: Double) {
         transaction {
-            ProductEntity.update({ProductEntity.title eq name}) {
-                with(SqlExpressionBuilder){
+            ProductEntity.update({ ProductEntity.title eq name }) {
+                with(SqlExpressionBuilder) {
                     it[ProductEntity.quantity] = ProductEntity.quantity - quantity
                 }
             }

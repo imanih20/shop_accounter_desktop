@@ -16,11 +16,5 @@ val productModule = module {
 
     single { GetAllProductsUseCase(get()) }
 
-    single { GetProductUseCase(get()) }
-
-    single { QueryProductUseCase(get()) }
-
-    single { GetProductId(get()) }
-
     single { ReduceProductQuantityUseCase(get()) }
 }

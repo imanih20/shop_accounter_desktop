@@ -8,17 +8,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import common.consts.REGULAR_FONT_SIZE
 
 
 @Composable
-fun listItemText(title: String, modifier: Modifier){
+fun listItemText(title: String, modifier: Modifier) {
     Text(
         title,
         modifier
             .padding(10.dp),
         color = MaterialTheme.colors.onSecondary,
-        fontSize = 18.sp,
+        fontSize = REGULAR_FONT_SIZE,
         textAlign = TextAlign.Center,
         overflow = TextOverflow.Clip
     )

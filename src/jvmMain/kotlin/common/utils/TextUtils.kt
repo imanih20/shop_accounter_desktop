@@ -1,17 +1,15 @@
 package common.utils
 
-import kotlin.text.StringBuilder
-
 object TextUtils {
-    fun doubleNumberString(text: String) : String{
+    fun doubleNumberString(text: String): String {
         val stringBuilder = StringBuilder()
         val chars = text.toCharArray()
         var dotCount = 0
         chars.forEach {
-            if (it.isDigit() || it == '.'){
-                if (it=='.'){
+            if (it.isDigit() || it == '.') {
+                if (it == '.') {
                     dotCount++
-                    if (dotCount<=1) {
+                    if (dotCount <= 1) {
                         stringBuilder.append(it)
                     }
                 } else {
@@ -22,19 +20,21 @@ object TextUtils {
         }
         return stringBuilder.toString()
     }
-    fun onlyNumberInput(text: String) : String{
+
+    fun onlyNumberInput(text: String): String {
         val stringBuilder = StringBuilder()
         val chars = text.toCharArray()
-        for (c in chars){
-            if (c == '.'){
+        for (c in chars) {
+            if (c == '.') {
                 break
             }
-            if (c.isDigit()){
+            if (c.isDigit()) {
                 stringBuilder.append(c)
             }
         }
         return stringBuilder.toString()
     }
+
     fun showNumberString(text: String): String {
         val stringBuilder = StringBuilder()
         val chars = text.toCharArray()
@@ -57,7 +57,7 @@ object TextUtils {
             stringBuilder.toString()
     }
 
-    private fun isZero(number: String) : Boolean{
+    private fun isZero(number: String): Boolean {
         val chars = number.toCharArray()
         var isZero = true
         if (chars.isEmpty()) return true
@@ -69,7 +69,7 @@ object TextUtils {
         return isZero
     }
 
-    fun isNumber(text: String) : Boolean {
+    fun isNumber(text: String): Boolean {
         val chars = text.toCharArray()
         var isNumber = true
         chars.forEach {
@@ -78,15 +78,16 @@ object TextUtils {
         }
         return isNumber
     }
-    fun addSeparator(number: String) : String{
+
+    fun addSeparator(number: String): String {
         val chars = number.toCharArray()
         val builder = StringBuilder()
-        var i = chars.size-1
+        var i = chars.size - 1
         var counter = 0
-        while (i>=0){
+        while (i >= 0) {
             counter++
             builder.append(chars[i])
-            if (counter % 3 == 0 && i>0){
+            if (counter % 3 == 0 && i > 0) {
                 builder.append("،")
             }
             i--

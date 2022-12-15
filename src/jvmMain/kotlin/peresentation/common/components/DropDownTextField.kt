@@ -20,14 +20,14 @@ fun <T> dropDownTextFiled(
     modifier: Modifier = Modifier,
     suggestions: List<T>,
     label: String,
-    onItemSelected: (T?)->Unit,
+    onItemSelected: (T?) -> Unit,
     enabled: Boolean = true,
     readOnly: Boolean = false,
     isError: Boolean = false,
 ) {
-    val defaultValue : T? = suggestions.firstOrNull()
+    val defaultValue: T? = suggestions.firstOrNull()
     var expanded by remember { mutableStateOf(false) }
-    var selected : T? by remember { mutableStateOf(defaultValue) }
+    var selected: T? by remember { mutableStateOf(defaultValue) }
     var textFiledValue by remember { mutableStateOf(defaultValue?.toString() ?: "") }
     var textFieldSize by remember { mutableStateOf(Size.Zero) }
     Column(
@@ -46,14 +46,14 @@ fun <T> dropDownTextFiled(
                     //This value is used to assign to the DropDown the same width
                     textFieldSize = coordinates.size.toSize()
                 }
-                .onFocusChanged { expanded = it.hasFocus }
-            ,
+                .onFocusChanged { expanded = it.hasFocus },
             label = { Text(label) },
             readOnly = readOnly,
             textStyle = MaterialTheme.typography.body1,
-            isError = isError
+            isError = isError,
+            singleLine = true
         )
-        if(enabled)
+        if (enabled)
             DropdownMenu(
                 expanded = expanded,
                 focusable = false,
@@ -63,7 +63,7 @@ fun <T> dropDownTextFiled(
                 },
                 modifier = Modifier
                     .align(Alignment.Start)
-                    .width(with(LocalDensity.current){textFieldSize.width.toDp()}),
+                    .width(with(LocalDensity.current) { textFieldSize.width.toDp() }),
             ) {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                     suggestions

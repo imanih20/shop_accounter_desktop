@@ -1,8 +1,6 @@
 package domain.statistic.model
 
 import data.statistic.model.StatisticEntity
-import domain.financier.model.Financier
-import domain.product.model.Product
 import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.ResultRow
 
@@ -16,8 +14,8 @@ data class Statistic(
     val totalIncome: Int = 0,
     val isPaid: Boolean = false
 ) {
-    companion object{
-        fun getFromResult(result: ResultRow) : Statistic {
+    companion object {
+        fun getFromResult(result: ResultRow): Statistic {
             return Statistic(
                 result[StatisticEntity.id].value,
                 result[StatisticEntity.financier],
@@ -30,11 +28,11 @@ data class Statistic(
             )
         }
 
-        fun getListFromQuery(query: Query) : List<Statistic>{
+        fun getListFromQuery(query: Query): List<Statistic> {
             val list = arrayListOf<Statistic>()
             query.forEach {
                 list.add(
-                    Statistic.getFromResult(it)
+                    getFromResult(it)
                 )
             }
             return list

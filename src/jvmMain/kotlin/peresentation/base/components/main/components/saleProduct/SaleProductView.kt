@@ -1,13 +1,9 @@
 package peresentation.base.components.main.components.saleProduct
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import domain.product.model.Product
 import domain.trade.model.ProductTrade
 import ir.huri.jcal.JalaliCalendar
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.inject
 import peresentation.base.components.main.components.addProduct.reAssign
@@ -17,12 +13,13 @@ import peresentation.common.components.adaptiveLayout
 
 @Composable
 fun saleProductView() {
-    val controller : SaleProductController by inject(SaleProductController::class.java)
+    val controller: SaleProductController by inject(SaleProductController::class.java)
     val scope = rememberCoroutineScope()
     val productList = remember { mutableStateListOf<Product>() }
     val saleList = remember { mutableStateListOf<ProductTrade>() }
+    var date by remember { mutableStateOf(JalaliCalendar().toString()) }
     suspend fun refreshSaleList() {
-        controller.getSales(JalaliCalendar().toString()).collect {
+        controller.getSales(date).collect {
             saleList.reAssign(it)
         }
     }
@@ -45,14 +42,23 @@ fun saleProductView() {
 //    }
     adaptiveLayout(
         { m ->
-            saleView(productList,m){
+            saleView(productList, m) {
                 scope.launch {
                     controller.saveSale(it)
                     refreshSaleList()
                 }
             }
-        },{m ->
-            showView(saleList,m){
+        }, { m ->
+            showView(
+                saleList,
+                m,
+                {
+                    date = it
+                    scope.launch {
+                        refreshSaleList()
+                    }
+                }
+                ) {
                 scope.launch {
                     controller.deleteSale(it)
                     refreshSaleList()

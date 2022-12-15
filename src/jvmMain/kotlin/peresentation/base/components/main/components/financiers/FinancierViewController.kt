@@ -14,18 +14,19 @@ class FinancierViewController(
     private val delFinancier: DeleteFinancierUseCase
 ) {
 
-    suspend fun saveFinancier(financier: Financier):Flow<Boolean>{
+    suspend fun saveFinancier(financier: Financier): Flow<Boolean> {
         return addFinancier(financier)
     }
-    suspend fun getFinanciers() : Flow<List<Financier>>{
+
+    suspend fun getFinanciers(): Flow<List<Financier>> {
         return getAllFinanciers()
     }
 
-    suspend fun updateFinancier(financier: Financier){
+    suspend fun updateFinancier(financier: Financier) {
         editFinancier(financier)
     }
 
-    suspend fun deleteFinancier(id: Int){
+    suspend fun deleteFinancier(id: Int) {
         delFinancier(id)
     }
 }

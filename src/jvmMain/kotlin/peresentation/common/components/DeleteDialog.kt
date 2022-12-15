@@ -7,30 +7,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.*
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.rememberDialogState
-import peresentation.base.baseCompose
+import common.consts.CORNER_RADIUS
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun deleteDialog(onNegativeButtonClicked: ()->Unit, onPositiveButtonClicked: () -> Unit){
+fun deleteDialog(onNegativeButtonClicked: () -> Unit, onPositiveButtonClicked: () -> Unit) {
     CompositionLocalProvider(
         LocalLayoutDirection provides LayoutDirection.Rtl,
-    ){
+    ) {
         AlertDialog(
             {},
-            shape = RoundedCornerShape(10.dp),
+            shape = RoundedCornerShape(CORNER_RADIUS),
             modifier = Modifier.width(300.dp),
             text = {
-                Box(contentAlignment = Alignment.BottomStart, modifier = Modifier.fillMaxWidth()){
+                Box(contentAlignment = Alignment.BottomStart, modifier = Modifier.fillMaxWidth()) {
                     Text(
                         "آیا از حذف این آیتم مطمئنید؟",
                         fontSize = 18.sp,
@@ -44,13 +39,13 @@ fun deleteDialog(onNegativeButtonClicked: ()->Unit, onPositiveButtonClicked: () 
             confirmButton = {
                 TextButton({
                     onPositiveButtonClicked()
-                }){
+                }) {
                     Text("بله")
                 }
             }, dismissButton = {
                 TextButton({
                     onNegativeButtonClicked()
-                }){
+                }) {
                     Text("خیر")
                 }
             })

@@ -9,7 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
+import common.consts.SPACER_SIZE
 import common.utils.TextUtils
 import domain.financier.model.Financier
 import domain.product.model.Product
@@ -19,11 +19,11 @@ import peresentation.common.components.inputTextFiled
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun editProductDialog(
-    onCloseRequest: ()->Unit,
+    onCloseRequest: () -> Unit,
     product: Product,
     financiers: List<Financier>,
-    onPositiveButtonClicked: (Product?)->Unit,
-){
+    onPositiveButtonClicked: (Product?) -> Unit,
+) {
     var title by remember { mutableStateOf(product.title) }
     var isEdited by remember { mutableStateOf(false) }
     var purchasePrice by remember { mutableStateOf(product.purchasePrice.toString()) }
@@ -32,9 +32,9 @@ fun editProductDialog(
     var owner by remember { mutableStateOf(product.owner) }
     Box(Modifier.wrapContentSize()) {
         AlertDialog(
-            {onCloseRequest()},
+            { onCloseRequest() },
             text = {
-                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl){
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                     Column {
                         Row {
                             inputTextFiled(
@@ -46,7 +46,7 @@ fun editProductDialog(
                                 modifier = Modifier.weight(2f),
                                 label = "عنوان"
                             )
-                            Spacer(Modifier.size(5.dp))
+                            Spacer(Modifier.size(SPACER_SIZE))
                             inputTextFiled(
                                 quantity,
                                 {
@@ -57,7 +57,7 @@ fun editProductDialog(
                                 label = "تعداد"
                             )
                         }
-                        Spacer(Modifier.size(5.dp))
+                        Spacer(Modifier.size(SPACER_SIZE))
                         Row {
                             inputTextFiled(
                                 TextUtils.addSeparator(purchasePrice),
@@ -67,7 +67,7 @@ fun editProductDialog(
                                 },
                                 label = "قیمت خرید"
                             )
-                            Spacer(Modifier.size(5.dp))
+                            Spacer(Modifier.size(SPACER_SIZE))
                             inputTextFiled(
                                 TextUtils.addSeparator(salePrice),
                                 {
@@ -76,7 +76,7 @@ fun editProductDialog(
                                 },
                                 label = "قیمت فروش"
                             )
-                            Spacer(Modifier.size(5.dp))
+                            Spacer(Modifier.size(SPACER_SIZE))
                             dropDownTextFiled(
                                 Modifier.weight(1f),
                                 financiers,
@@ -107,13 +107,13 @@ fun editProductDialog(
                     } else {
                         onPositiveButtonClicked(null)
                     }
-                }){
+                }) {
                     Text("ثبت")
                 }
             }, dismissButton = {
                 TextButton({
                     onCloseRequest()
-                }){
+                }) {
                     Text("لغو")
                 }
             }

@@ -16,7 +16,5 @@ val financierModule = module {
 
     single { GetFinancierUseCase(get()) }
 
-    single { GetFinancierId(get()) }
-
     single { GetAllFinanciersUseCase(get()) }
 }

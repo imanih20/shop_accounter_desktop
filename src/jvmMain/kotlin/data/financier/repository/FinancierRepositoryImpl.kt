@@ -11,7 +11,7 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class FinancierRepositoryImpl : FinancierRepository {
-    override suspend fun addFinancier(financier: Financier) : Flow<Boolean>{
+    override suspend fun addFinancier(financier: Financier): Flow<Boolean> {
         return flow {
             var isSucceed = false
             try {
@@ -23,7 +23,7 @@ class FinancierRepositoryImpl : FinancierRepository {
                     }.value
                     isSucceed = id > 0
                 }
-            }catch (e: ExposedSQLException){
+            } catch (e: ExposedSQLException) {
                 isSucceed = false
             }
             emit(isSucceed)
@@ -32,25 +32,13 @@ class FinancierRepositoryImpl : FinancierRepository {
 
     override suspend fun getFinancier(name: String): Flow<Financier?> {
         return flow {
-            var financier : Financier? = null
+            var financier: Financier? = null
             transaction {
                 FinancierEntity.select { FinancierEntity.name eq name }.forEach {
                     financier = Financier.getFinancierFromResult(it)
                 }
             }
             emit(financier)
-        }
-    }
-
-    override suspend fun getFinancierId(name: String): Flow<Int> {
-        return flow {
-            var id = 0
-            transaction {
-                FinancierEntity.select { FinancierEntity.name eq name }.forEach {
-                    id = it[FinancierEntity.id].value
-                }
-            }
-            emit(id)
         }
     }
 
@@ -68,8 +56,8 @@ class FinancierRepositoryImpl : FinancierRepository {
 
     override suspend fun editFinancier(financier: Financier) {
         transaction {
-            FinancierEntity.update({FinancierEntity.id eq financier.id}) {
-                it[name] =  financier.name
+            FinancierEntity.update({ FinancierEntity.id eq financier.id }) {
+                it[name] = financier.name
                 it[description] = financier.description
                 it[share] = financier.share
             }
@@ -78,7 +66,7 @@ class FinancierRepositoryImpl : FinancierRepository {
 
     override suspend fun deleteFinancier(id: Int) {
         transaction {
-            FinancierEntity.deleteWhere { FinancierEntity.id eq id}
+            FinancierEntity.deleteWhere { FinancierEntity.id eq id }
         }
     }
 }

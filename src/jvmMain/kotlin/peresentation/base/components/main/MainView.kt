@@ -1,7 +1,8 @@
 package peresentation.base.components.main
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.runtime.Composable
@@ -16,7 +17,7 @@ import peresentation.base.components.main.components.statistics.statisticsView
 import peresentation.base.components.menu.MenuItems
 
 @Composable
-fun mainView(selectedItem: MenuItems,modifier: Modifier = Modifier){
+fun mainView(selectedItem: MenuItems, modifier: Modifier = Modifier) {
     Card(
         modifier
             .fillMaxWidth()
@@ -24,12 +25,12 @@ fun mainView(selectedItem: MenuItems,modifier: Modifier = Modifier){
             .background(GRAY),
         shape = RoundedCornerShape(20.dp)
     ) {
-        when(selectedItem){
-            MenuItems.PURCHASE-> addProductView()
-            MenuItems.SALE-> saleProductView()
-            MenuItems.FINANCIER-> financierManagerView()
-            MenuItems.STATISTICS-> statisticsView()
-            MenuItems.SEARCH-> searchView()
+        when (selectedItem) {
+            MenuItems.PURCHASE -> addProductView()
+            MenuItems.SALE -> saleProductView()
+            MenuItems.FINANCIER -> financierManagerView()
+            MenuItems.STATISTICS -> statisticsView()
+            MenuItems.SEARCH -> searchView()
         }
     }
 }

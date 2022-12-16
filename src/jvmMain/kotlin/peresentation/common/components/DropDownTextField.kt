@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.toSize
+import kotlin.math.exp
 
 @Composable
 fun <T> dropDownTextFiled(
@@ -38,6 +39,7 @@ fun <T> dropDownTextFiled(
             value = textFiledValue,
             onValueChange = {
                 textFiledValue = it
+                expanded = true
                 if (selected.toString() != it) onItemSelected(null)
             },
             modifier = Modifier

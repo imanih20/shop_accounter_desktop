@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.mohyeddin"
-version = "1.1.0"
+version = "1.1.1"
 // region Work around temporary Compose bugs.
 configurations.all {
     attributes {
@@ -78,7 +78,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Exe, TargetFormat.Deb)
             packageName = "accounter"
-            packageVersion = "1.1.0"
+            packageVersion = "1.1.1"
             includeAllModules = true
         }
     }

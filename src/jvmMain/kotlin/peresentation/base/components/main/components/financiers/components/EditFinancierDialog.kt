@@ -26,7 +26,7 @@ fun editFinancierDialog(
     var description by remember { mutableStateOf(financier.description) }
     Box(Modifier.wrapContentSize()) {
         AlertDialog(
-            { onCloseRequest() },
+            {},
             text = {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                     Column {

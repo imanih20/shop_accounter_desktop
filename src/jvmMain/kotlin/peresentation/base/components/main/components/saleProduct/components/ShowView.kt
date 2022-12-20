@@ -16,13 +16,13 @@ import peresentation.common.components.deleteDialog
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun showView(saleList: List<ProductTrade>, modifier: Modifier = Modifier,onDateChanged: (String)->Unit, onDeleteRequest: (Int) -> Unit) {
+fun showView(saleList: List<ProductTrade>, modifier: Modifier = Modifier,onDateChanged: (String)->Unit, onDeleteRequest: (ProductTrade) -> Unit) {
     var visible by remember { mutableStateOf(false) }
-    var id by remember { mutableStateOf(0) }
+    var trade by remember { mutableStateOf<ProductTrade?>(null) }
     Box(modifier) {
         val state = rememberLazyListState()
         if (visible) deleteDialog({ visible = false }) {
-            onDeleteRequest(id)
+            trade?.let{onDeleteRequest(it)}
             visible = false
         }
         LazyColumn(
@@ -35,8 +35,8 @@ fun showView(saleList: List<ProductTrade>, modifier: Modifier = Modifier,onDateC
             }
             items(saleList) {
 
-                listItem(it) { i ->
-                    id = i
+                listItem(it) { tr ->
+                    trade = tr
                     visible = true
                 }
                 Spacer(Modifier.size(2.dp))

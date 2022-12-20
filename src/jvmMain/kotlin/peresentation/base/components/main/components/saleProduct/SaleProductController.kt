@@ -4,6 +4,7 @@ import domain.financier.model.Financier
 import domain.financier.usecases.GetFinancierUseCase
 import domain.product.model.Product
 import domain.product.usecase.GetAllProductsUseCase
+import domain.product.usecase.IncreaseProductQuantityUseCase
 import domain.product.usecase.ReduceProductQuantityUseCase
 import domain.statistic.model.Statistic
 import domain.statistic.usecase.SaveStatisticUseCase
@@ -21,10 +22,11 @@ class SaleProductController(
     private val deleteTrade: DeleteTradeUseCase,
     private val getFinancier: GetFinancierUseCase,
     private val reduceProductQuantity: ReduceProductQuantityUseCase,
+    private val increaseProductQuantity: IncreaseProductQuantityUseCase
 ) {
     suspend fun saveSale(trade: ProductTrade) {
         val dateFields = trade.date.split('-')
-        var financier: Financier? = null
+        var financier: Financier?
         addTrade(trade)
         getFinancier(trade.owner).collect {
             financier = it
@@ -52,7 +54,22 @@ class SaleProductController(
         return getSalesOfDay(dateFields[0], dateFields[1], dateFields[2])
     }
 
-    suspend fun deleteSale(id: Int) {
-        deleteTrade(id)
+    suspend fun deleteSale(trade: ProductTrade) {
+        val dateFields = trade.date.split('-')
+        deleteTrade(trade.id)
+        getFinancier(trade.owner).collect {
+            val financier = it
+            val share = trade.profit * (financier!!.share.toDouble() / 100)
+            saveStatistic(
+                Statistic(
+                    financier = trade.owner,
+                    year = dateFields[0].toInt(),
+                    month = dateFields[1].toInt(),
+                    totalSale = -trade.totalPrice,
+                    totalIncome = -share.toInt()
+                )
+            )
+        }
+        increaseProductQuantity(trade.title,trade.quantity)
     }
 }

@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.onFocusedBoundsChanged
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -22,8 +21,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.application
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.AngleLeft
@@ -98,7 +95,7 @@ fun datePicker(
         },
     ) {
         DropdownMenuItem(onClick = {}, enabled = false) {
-            Column {
+            Column(verticalArrangement = Arrangement.Center, modifier = Modifier.wrapContentSize()) {
                 persianCalender(date, yearRange) {
                     date = it
                     expanded = false
@@ -179,7 +176,7 @@ fun calenderHeader(header: String, state: DatePickerState, onPreOrNextClick: () 
         ) {
             Text(header, Modifier.paddingFromBaseline(top = 32.dp), color = MaterialTheme.colors.onBackground)
             Spacer(Modifier.size(4.dp))
-            Box(Modifier.size(24.dp), contentAlignment = Alignment.Center) {
+            Box(Modifier.size(22.dp), contentAlignment = Alignment.Center) {
                 Icon(
                     if (state.yearShowing) arrowDropUp else arrowDropDown,
                     "انتخاب  سال",
@@ -189,14 +186,14 @@ fun calenderHeader(header: String, state: DatePickerState, onPreOrNextClick: () 
         }
         if (!state.yearShowing) {
             Row {
-                Box(Modifier.size(24.dp), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(22.dp), contentAlignment = Alignment.Center) {
                     Icon(FontAwesomeIcons.Solid.AngleRight, "ماه بعد", Modifier.clickable {
                         if (state.selectedDate.month < 12) state.selectedDate.month++ else state.selectedDate.month = 1
                         onPreOrNextClick()
                     }, tint = MaterialTheme.colors.onBackground)
                 }
                 Spacer(Modifier.size(24.dp))
-                Box(Modifier.size(24.dp), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(22.dp), contentAlignment = Alignment.Center) {
                     Icon(FontAwesomeIcons.Solid.AngleLeft, "ماه قبل", Modifier.clickable {
                         if (state.selectedDate.month > 1) state.selectedDate.month-- else state.selectedDate.month = 12
                         onPreOrNextClick()

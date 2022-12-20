@@ -16,4 +16,5 @@ interface ProductRepository {
 
     suspend fun reduceProductQuantity(name: String, quantity: Double)
 
+    suspend fun increaseProductQuantity(name: String, quantity: Double)
 }

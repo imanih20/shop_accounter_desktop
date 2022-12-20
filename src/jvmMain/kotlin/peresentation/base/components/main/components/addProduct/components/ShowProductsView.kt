@@ -20,13 +20,13 @@ fun showProductView(
     purchaseList: List<ProductTrade>,
     modifier: Modifier = Modifier,
     onDateChanged: (String)->Unit,
-    onDeleteItemRequest: (Int) -> Unit
+    onDeleteItemRequest: (ProductTrade) -> Unit
 ) {
-    var id by remember { mutableStateOf(0) }
+    var trade by remember { mutableStateOf<ProductTrade?>(null) }
     var visible by remember { mutableStateOf(false) }
     Box(modifier) {
         if (visible) deleteDialog({ visible = false }) {
-            onDeleteItemRequest(id)
+            trade?.let { onDeleteItemRequest(it) }
             visible = false
         }
         val state = rememberLazyListState()
@@ -39,9 +39,9 @@ fun showProductView(
                 }
             }
             items(purchaseList) {
-                showListItem(it) { i ->
+                showListItem(it) { tr ->
                     visible = true
-                    id = i
+                    trade = tr
                 }
                 Spacer(Modifier.size(SPACER_SIZE))
             }

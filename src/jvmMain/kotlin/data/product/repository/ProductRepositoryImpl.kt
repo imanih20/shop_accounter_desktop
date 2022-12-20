@@ -99,4 +99,14 @@ class ProductRepositoryImpl : ProductRepository {
         }
     }
 
+    override suspend fun increaseProductQuantity(name: String, quantity: Double) {
+        transaction {
+            ProductEntity.update({ ProductEntity.title eq name }) {
+                with(SqlExpressionBuilder) {
+                    it[ProductEntity.quantity] = ProductEntity.quantity + quantity
+                }
+            }
+        }
+    }
+
 }

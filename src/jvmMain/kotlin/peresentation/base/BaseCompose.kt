@@ -17,7 +17,7 @@ fun baseCompose() {
         return when (menuItem) {
             MenuItems.PURCHASE -> "خرید"
             MenuItems.SALE -> "فروش"
-            MenuItems.FINANCIER -> "سهام داران"
+            MenuItems.FINANCIER -> "سهامداران"
             MenuItems.STATISTICS -> "آمار"
             MenuItems.SEARCH -> "جستجو"
         }

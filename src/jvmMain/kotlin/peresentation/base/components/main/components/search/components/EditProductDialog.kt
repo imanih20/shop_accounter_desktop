@@ -1,10 +1,7 @@
 package peresentation.base.components.main.components.search.components
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -32,7 +29,7 @@ fun editProductDialog(
     var owner by remember { mutableStateOf(product.owner) }
     Box(Modifier.wrapContentSize()) {
         AlertDialog(
-            { onCloseRequest() },
+            {},
             text = {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                     Column {
@@ -116,7 +113,7 @@ fun editProductDialog(
                 }) {
                     Text("لغو")
                 }
-            }
+            },
         )
     }
 }

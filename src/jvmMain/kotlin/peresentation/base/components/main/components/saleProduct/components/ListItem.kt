@@ -24,7 +24,7 @@ import peresentation.common.components.listItemText
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun listItem(trade: ProductTrade, onDeleteIconClicked: (Int) -> Unit) {
+fun listItem(trade: ProductTrade, onDeleteIconClicked: (ProductTrade) -> Unit) {
     var activate by remember { mutableStateOf(false) }
     Card(
         elevation = CARD_ELEVATION,
@@ -43,7 +43,7 @@ fun listItem(trade: ProductTrade, onDeleteIconClicked: (Int) -> Unit) {
                     .weight(2f)
             )
             listItemText(
-                trade.quantity.toString(),
+                TextUtils.showNumberString(trade.quantity.toString()),
                 Modifier
                     .weight(1f)
             )
@@ -58,7 +58,7 @@ fun listItem(trade: ProductTrade, onDeleteIconClicked: (Int) -> Unit) {
                     "حذف",
                     tint = Color.Red,
                     modifier = Modifier.clickable {
-                        onDeleteIconClicked(trade.id)
+                        onDeleteIconClicked(trade)
                     })
             }
         }

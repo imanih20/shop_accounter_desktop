@@ -17,4 +17,6 @@ val productModule = module {
     single { GetAllProductsUseCase(get()) }
 
     single { ReduceProductQuantityUseCase(get()) }
+
+    single { IncreaseProductQuantityUseCase(get()) }
 }

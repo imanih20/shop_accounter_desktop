@@ -4,6 +4,7 @@ import domain.financier.model.Financier
 import domain.financier.usecases.GetAllFinanciersUseCase
 import domain.product.model.Product
 import domain.product.usecase.AddProductUseCase
+import domain.product.usecase.ReduceProductQuantityUseCase
 import domain.statistic.model.Statistic
 import domain.statistic.usecase.SaveStatisticUseCase
 import domain.trade.model.ProductTrade
@@ -21,7 +22,8 @@ class AddProductController(
     private val addTrade: AddTradeUseCase,
     private val saveStatistic: SaveStatisticUseCase,
     private val getAllFinancier: GetAllFinanciersUseCase,
-    private val deleteTradeById: DeleteTradeUseCase
+    private val deleteTradeById: DeleteTradeUseCase,
+    private val reduceProductQuantity: ReduceProductQuantityUseCase
 ) {
     suspend fun saveProduct(product: Product, totalPurchasePrice: Int, date: String) {
         val dateFields = date.split("-")
@@ -35,7 +37,7 @@ class AddProductController(
                         title = product.title,
                         type = TradeType.PURCHASE,
                         quantity = product.quantity,
-                        totalPrice = totalPurchasePrice.toInt(),
+                        totalPrice = totalPurchasePrice,
                         date = date,
                         profit = 0,
                         owner = product.owner
@@ -48,7 +50,7 @@ class AddProductController(
                         financier = product.owner,
                         year = dateFields[0].toInt(),
                         month = dateFields[1].toInt(),
-                        totalPurchase = totalPurchasePrice.toInt(),
+                        totalPurchase = totalPurchasePrice,
                         totalSale = 0,
                         totalIncome = 0,
                     )
@@ -67,7 +69,15 @@ class AddProductController(
         return getAllFinancier()
     }
 
-    suspend fun deleteTrade(id: Int) {
-        deleteTradeById(id)
+    suspend fun deleteTrade(trade: ProductTrade) {
+        val dateFields = trade.date.split('-')
+        deleteTradeById(trade.id)
+        saveStatistic(Statistic(
+            financier = trade.owner,
+            year = dateFields[0].toInt(),
+            month = dateFields[1].toInt(),
+            totalPurchase = -trade.totalPrice,
+        ))
+        reduceProductQuantity(trade.title,trade.quantity)
     }
 }

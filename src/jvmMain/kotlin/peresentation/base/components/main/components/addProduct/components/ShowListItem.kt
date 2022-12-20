@@ -24,7 +24,7 @@ import peresentation.common.components.listItemText
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun showListItem(trade: ProductTrade, onDeleteIconClicked: (Int) -> Unit) {
+fun showListItem(trade: ProductTrade, onDeleteIconClicked: (ProductTrade) -> Unit) {
     var activate by remember { mutableStateOf(false) }
     Card(
         elevation = CARD_ELEVATION,
@@ -58,7 +58,7 @@ fun showListItem(trade: ProductTrade, onDeleteIconClicked: (Int) -> Unit) {
                     "حذف",
                     tint = Color.Red,
                     modifier = Modifier.clickable {
-                        onDeleteIconClicked(trade.id)
+                        onDeleteIconClicked(trade)
                     })
             }
         }

@@ -38,7 +38,7 @@ data class ProductTrade(
     val owner: String
 ) {
     companion object {
-        fun getTradeFromResult(result: ResultRow): ProductTrade {
+        private fun getTradeFromResult(result: ResultRow): ProductTrade {
             return ProductTrade(
                 result[TradeEntity.id].value,
                 result[TradeEntity.title],
@@ -49,6 +49,20 @@ data class ProductTrade(
                 result[TradeEntity.date],
                 result[TradeEntity.owner]
             )
+        }
+
+        fun getTotalTradeForEachFinancier(list: List<ProductTrade>) : Map<String,Int>{
+            val financierTotalTrade = mutableMapOf<String,Int>()
+            list.groupBy {
+                it.owner
+            }.forEach { entry ->
+                var totalPurchase = 0
+                entry.value.forEach {
+                    totalPurchase+=it.totalPrice
+                }
+                financierTotalTrade[entry.key] = totalPurchase
+            }
+            return  financierTotalTrade
         }
 
         fun getTradeFromQuery(query: Query): List<ProductTrade> {

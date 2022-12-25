@@ -1,13 +1,17 @@
 package peresentation.base.components.main.components.search.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import domain.financier.model.Financier
@@ -29,6 +33,7 @@ fun resultShowView(
     var isEditActivate by remember { mutableStateOf(false) }
     var isDeleteActivate by remember { mutableStateOf(false) }
     Box(modifier) {
+        val state = rememberLazyListState()
         if (isEditActivate) editProductDialog(
             { isEditActivate = false },
             product!!,
@@ -47,7 +52,7 @@ fun resultShowView(
                 isDeleteActivate = false
             }
         )
-        LazyColumn(Modifier.padding(10.dp)) {
+        LazyColumn(Modifier.padding(10.dp), state = state) {
             stickyHeader {
                 resultListHeader()
             }
@@ -66,5 +71,12 @@ fun resultShowView(
                 Spacer(Modifier.size(2.dp))
             }
         }
+        VerticalScrollbar(
+            modifier = Modifier
+                .align(Alignment.CenterEnd),
+            adapter = rememberScrollbarAdapter(
+                scrollState = state
+            )
+        )
     }
 }

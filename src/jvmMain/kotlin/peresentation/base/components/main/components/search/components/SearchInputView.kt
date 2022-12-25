@@ -20,6 +20,7 @@ fun searchInputView(
 ) {
     var owner by remember { mutableStateOf("") }
     var query by remember { mutableStateOf("") }
+
     Column(modifier) {
         Row {
             inputTextFiled(
@@ -40,7 +41,6 @@ fun searchInputView(
                     owner = it?.toString() ?: ""
                     onQueryChange(query, owner)
                 },
-                enabled = financiers.size > 1,
             )
         }
     }

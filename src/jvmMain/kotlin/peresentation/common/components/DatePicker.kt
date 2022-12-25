@@ -56,7 +56,7 @@ fun inputDatePicker(
     ) {
         DropdownMenuItem(onClick = {}, enabled = false) {
             Column {
-                persianCalender(date, yearRange) {
+                persianCalender(date, yearRange) {it,_->
                     date = it
                     onDateChanged(it)
                 }
@@ -96,10 +96,10 @@ fun datePicker(
     ) {
         DropdownMenuItem(onClick = {}, enabled = false) {
             Column(verticalArrangement = Arrangement.Center, modifier = Modifier.wrapContentSize()) {
-                persianCalender(date, yearRange) {
-                    date = it
-                    expanded = false
-                    onDateChanged(it)
+                persianCalender(date, yearRange) {newDate,exp->
+                    date = newDate
+                    expanded = exp
+                    onDateChanged(newDate)
                 }
                 TextButton({ expanded = false }, Modifier.align(Alignment.End)) {
                     Text("خروج")
@@ -112,15 +112,15 @@ fun datePicker(
 
 @Composable
 @Preview
-fun persianCalender(initialDate: String, yearRange: IntRange, onSelected: (String) -> Unit) {
+fun persianCalender(initialDate: String, yearRange: IntRange, onSelected: (String,expanded: Boolean) -> Unit) {
     val dateFields = initialDate.split('-')
     val state = remember { DatePickerState(JalaliCalendar(dateFields[0].toInt(),dateFields[1].toInt(),dateFields[2].toInt()), yearRange) }
     var header by remember { mutableStateOf("${state.selectedDate.monthString} ${state.selectedDate.year}") }
-    fun calcDayRange(month: Int): IntRange {
-        return if (month < 7) 1..30 else if (month in 7..11) 1..31 else 1..29
+    fun calcDayRange(year: Int,month: Int): IntRange {
+        return if (month < 7) 1..30 else if (month in 7..11) 1..31 else if (year%4==3) 1..30 else 1..29
     }
 
-    var daysRange by remember { mutableStateOf(calcDayRange(state.selectedDate.month)) }
+    var daysRange by remember { mutableStateOf(calcDayRange(state.selectedDate.year,state.selectedDate.month)) }
     Column(Modifier.height(288.dp).width(256.dp)) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
             calenderHeader(
@@ -128,8 +128,8 @@ fun persianCalender(initialDate: String, yearRange: IntRange, onSelected: (Strin
                 state
             ) {
                 header = "${state.selectedDate.monthString} ${state.selectedDate.year}"
-                daysRange = calcDayRange(state.selectedDate.month)
-                onSelected(state.selectedDate.toString())
+                daysRange = calcDayRange(state.selectedDate.year,state.selectedDate.month)
+                onSelected(state.selectedDate.toString(),true)
             }
             AnimatedVisibility(
                 visible = state.yearShowing,
@@ -138,7 +138,8 @@ fun persianCalender(initialDate: String, yearRange: IntRange, onSelected: (Strin
             ) {
                 yearPicker(state) {
                     header = "${state.selectedDate.monthString} ${state.selectedDate.year}"
-                    onSelected(state.selectedDate.toString())
+                    onSelected(state.selectedDate.toString(),true)
+                    daysRange = calcDayRange(state.selectedDate.year,state.selectedDate.month)
                 }
             }
             AnimatedVisibility(
@@ -147,7 +148,7 @@ fun persianCalender(initialDate: String, yearRange: IntRange, onSelected: (Strin
                 exit = slideOutVertically()
             ) {
                 calenderView(state, daysRange) {
-                    onSelected(state.selectedDate.toString())
+                    onSelected(state.selectedDate.toString(),false)
 
                 }
             }
